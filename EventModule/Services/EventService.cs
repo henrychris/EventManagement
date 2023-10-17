@@ -4,6 +4,8 @@ using EventModule.Data.Models;
 using EventModule.Interfaces;
 using Shared.Enums;
 using Shared.EventModels;
+using ErrorOr;
+using EventModule.ServiceErrors;
 
 namespace EventModule.Services;
 
@@ -27,10 +29,10 @@ public class EventService : IEventService
         return _mapper.Map<EventResponse>(newEvent);
     }
 
-    public async Task<EventResponse?> GetEvent(string id)
+    public async Task<ErrorOr<EventResponse>> GetEvent(string id)
     {
         var result = await _dbContext.Events.FindAsync(id);
-        return result is not null ? _mapper.Map<EventResponse>(result) : null;
+        return result is not null ? _mapper.Map<EventResponse>(result) : Errors.Event.NotFound;
     }
 
     public async Task<EventResponse?> UpdateEvent(string id, UpdateEventRequest request)
