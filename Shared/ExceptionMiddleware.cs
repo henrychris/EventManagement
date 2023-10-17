@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Shared.Responses;
 
 namespace Shared;
 
@@ -46,12 +47,11 @@ public class ExceptionMiddleware
     {
         context.Response.ContentType = "application/problem+json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        await context.Response.WriteAsync(new InternalErrorResponse
+
+        var response = new ApiResponse<object>(null, "Sorry, something went wrong!", false)
         {
-            Code = context.Response.StatusCode,
-            Reason = errorMessage,
-            Note = "See application log for stack trace.",
-            Status = "Internal Server Error!"
-        }.ToString());
+            Note = string.Concat(errorMessage, " ", "Check the application logs for more info.")
+        };
+        await context.Response.WriteAsync(response.ToJsonString());
     }
 }
