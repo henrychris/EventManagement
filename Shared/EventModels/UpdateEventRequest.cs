@@ -1,6 +1,4 @@
-﻿using Shared.Enums;
-
-namespace Shared.EventModels;
+﻿namespace Shared.EventModels;
 
 // note, for this one, the eventId should be passed as a query parameter
 public record UpdateEventRequest(

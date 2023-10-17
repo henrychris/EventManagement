@@ -4,7 +4,6 @@ using EventModule.Interfaces;
 using EventModule.Services;
 using Microsoft.EntityFrameworkCore;
 using Shared;
-using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
