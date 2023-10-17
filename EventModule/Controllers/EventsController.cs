@@ -22,11 +22,21 @@ public class EventsController : BaseController
         return CreatedAtAction(nameof(GetEvent), routeValues: new { id = response.Guid }, response);
     }
 
+    /// <summary>
+    /// Retrieves an event by its unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the event to retrieve.</param>
+    /// <returns>
+    /// - If the event is found, it returns an HTTP 200 (OK) response with an ApiResponse containing the event data.
+    /// - If the event is not found or an error occurs, it returns an appropriate error response.
+    /// </returns>
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetEvent(Guid id)
     {
         var getEventResult = await _eventService.GetEvent(id.ToString());
-
+        
+        // If successful, return the event data in an ApiResponse.
+        // If an error occurs, return an error response using the ReturnErrorResponse method.
         return getEventResult.Match(
             _ => Ok(getEventResult.ToSuccessfulApiResponse()),
             ReturnErrorResponse);
