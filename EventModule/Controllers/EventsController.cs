@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.EventModels;
+using Shared.Extensions;
 
 namespace EventModule.Controllers;
 
@@ -24,8 +25,11 @@ public class EventsController : BaseController
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetEvent(Guid id)
     {
-        var result = await _eventService.GetEvent(id.ToString());
-        return result is null ? NotFound() : Ok(result);
+        var getEventResult = await _eventService.GetEvent(id.ToString());
+
+        return getEventResult.Match(
+            _ => Ok(getEventResult.ToSuccessfulApiResponse()),
+            ReturnErrorResponse);
     }
 
     [HttpPut("{id:guid}")]
