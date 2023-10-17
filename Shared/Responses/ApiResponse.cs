@@ -13,6 +13,7 @@ public class ApiResponse<T>
 
     public bool Status { get; set; }
     public string Message { get; set; }
+    public string Note { get; set; } = "N/A";
     public T? Data { get; set; }
 
     public string ToJsonString()
