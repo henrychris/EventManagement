@@ -1,6 +1,12 @@
-﻿namespace UserModule.Interfaces;
+﻿using ErrorOr;
+using Shared.UserModels;
+using Shared.UserModels.Requests;
+using Shared.UserModels.Responses;
+
+namespace UserModule.Interfaces;
 
 public interface IAuthenticationService
 {
-    string CreateUserJwt(string emailAddress, string userRole, string userId);
+    Task<ErrorOr<UserResponse>> RegisterAsync(RegisterRequest request);
+    Task<ErrorOr<UserResponse>> LoginAsync(LoginRequest request);
 }
