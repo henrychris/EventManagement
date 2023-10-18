@@ -40,13 +40,13 @@ public class BaseController : ControllerBase
 
     private static IActionResult CreateValidationError(List<Error> errors)
     {
-        var problemDetails = new
-        {
-            Status = StatusCodes.Status400BadRequest,
-            Title = "Validation error",
-            Detail = "One or more validation errors occurred.",
-            Errors = errors.ToDictionary(e => e.Code, e => new[] { e.Description })
-        };
+        var problemDetails = new ApiErrorResponse<object>(
+            errors.ToDictionary(e => e.Code,
+                e => new[]
+                {
+                    e.Description
+                }),
+            message: "One or more validation errors occured.");
 
         return new ObjectResult(problemDetails)
         {
