@@ -22,8 +22,13 @@ public class EventService : IEventService
 
     public async Task<ErrorOr<EventResponse>> CreateEvent(CreateEventRequest request)
     {
+        var validateEventResult = ValidateEvent(request);
+        if (validateEventResult.IsError)
+        {
+            return validateEventResult.Errors;
+        }
+
         var newEvent = _mapper.Map<Event>(request);
-        // todo: validate event before mapping? or after. sha validate it. return a validation error.
         await _dbContext.Events.AddAsync(newEvent);
         await _dbContext.SaveChangesAsync();
         return _mapper.Map<EventResponse>(newEvent);
@@ -96,5 +101,32 @@ public class EventService : IEventService
         _dbContext.Events.Remove(entityToRemove);
         await _dbContext.SaveChangesAsync();
         return Result.Deleted;
+    }
+
+    private static ErrorOr<Event> ValidateEvent(CreateEventRequest request)
+    {
+        List<Error> errors = new();
+
+        if (request.Date < DateTime.UtcNow)
+        {
+            errors.Add(Errors.Event.InvalidEventDate);
+        }
+
+        if (request.StartTime < request.Date)
+        {
+            errors.Add(Errors.Event.InvalidEventStartTime);
+        }
+
+        if (request.EndTime < request.Date || request.EndTime < request.StartTime)
+        {
+            errors.Add(Errors.Event.InvalidEventEndTime);
+        }
+
+        if (request.Price < 0)
+        {
+            errors.Add(Errors.Event.InvalidTicketPrice);
+        }
+
+        return errors;
     }
 }
