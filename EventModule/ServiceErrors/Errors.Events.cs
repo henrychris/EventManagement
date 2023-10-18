@@ -18,6 +18,16 @@ public static class Errors
             code: "Event.MissingEventDescription",
             description: "The event has no description.");
 
+        public static Error InvalidName => Error.Validation(
+            code: "Event.InvalidName",
+            description: $"Event name must be at least {Data.Models.Event.MinNameLength}" +
+                         $" characters long and at most {Data.Models.Event.MaxNameLength} characters long.");
+
+        public static Error InvalidDescription => Error.Validation(
+            code: "Event.InvalidDescription",
+            description: $"Event description must be at least {Data.Models.Event.MinDescriptionLength}" +
+                         $" characters long and at most {Data.Models.Event.MaxDescriptionLength} characters long.");
+
         public static Error InvalidEventDate => Error.Validation(
             code: "Event.InvalidEventDate",
             description: "The event can't start in the past.");

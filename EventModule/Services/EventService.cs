@@ -151,6 +151,16 @@ public class EventService : IEventService
             errors.Add(Errors.Event.MissingEventName);
         }
 
+        if (request.Name.Length is < Event.MinNameLength or > Event.MaxNameLength)
+        {
+            errors.Add(Errors.Event.InvalidName);
+        }
+
+        if (request.Description.Length is < Event.MinDescriptionLength or > Event.MaxDescriptionLength)
+        {
+            errors.Add(Errors.Event.InvalidDescription);
+        }
+
         if (string.IsNullOrEmpty(request.Description))
         {
             errors.Add(Errors.Event.MissingEventDescription);
