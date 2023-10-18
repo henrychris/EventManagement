@@ -20,10 +20,10 @@ public class EventService : IEventService
         _mapper = mapper;
     }
 
-    public async Task<EventResponse> CreateEvent(CreateEventRequest request)
+    public async Task<ErrorOr<EventResponse>> CreateEvent(CreateEventRequest request)
     {
         var newEvent = _mapper.Map<Event>(request);
-        // todo: validate event before mapping? or after. sha validate it.
+        // todo: validate event before mapping? or after. sha validate it. return a validation error.
         await _dbContext.Events.AddAsync(newEvent);
         await _dbContext.SaveChangesAsync();
         return _mapper.Map<EventResponse>(newEvent);
@@ -35,12 +35,12 @@ public class EventService : IEventService
         return result is not null ? _mapper.Map<EventResponse>(result) : Errors.Event.NotFound;
     }
 
-    public async Task<EventResponse?> UpdateEvent(string id, UpdateEventRequest request)
+    public async Task<ErrorOr<EventResponse>> UpdateEvent(string id, UpdateEventRequest request)
     {
         var existingEvent = await _dbContext.Events.FindAsync(id);
         if (existingEvent is null)
         {
-            return null;
+            return Errors.Event.NotFound;
         }
 
         existingEvent.Name = string.IsNullOrEmpty(request.Name) ? existingEvent.Name : request.Name;
@@ -85,17 +85,16 @@ public class EventService : IEventService
         return _mapper.Map<EventResponse>(existingEvent);
     }
 
-    public async Task<bool> DeleteEvent(string id)
+    public async Task<ErrorOr<Deleted>> DeleteEvent(string id)
     {
-        // todo: return an actual response
         var entityToRemove = await _dbContext.Events.FindAsync(id);
         if (entityToRemove is null)
         {
-            return false;
+            return Errors.Event.NotFound;
         }
 
         _dbContext.Events.Remove(entityToRemove);
         await _dbContext.SaveChangesAsync();
-        return true;
+        return Result.Deleted;
     }
 }

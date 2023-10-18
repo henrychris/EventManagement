@@ -1,4 +1,5 @@
-﻿using EventModule.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using EventModule.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.EventModels;
@@ -16,10 +17,13 @@ public class EventsController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateEvent(CreateEventRequest model)
+    public async Task<IActionResult> CreateEvent([Required] CreateEventRequest model)
     {
-        var response = await _eventService.CreateEvent(model);
-        return CreatedAtAction(nameof(GetEvent), routeValues: new { id = response.Guid }, response);
+        var createEventResult = await _eventService.CreateEvent(model);
+        return createEventResult.Match(
+            eventObj => CreatedAtAction(nameof(GetEvent), routeValues: new { id = eventObj.Guid },
+                createEventResult.ToSuccessfulApiResponse()),
+            ReturnErrorResponse);
     }
 
     /// <summary>
@@ -34,7 +38,7 @@ public class EventsController : BaseController
     public async Task<IActionResult> GetEvent(Guid id)
     {
         var getEventResult = await _eventService.GetEvent(id.ToString());
-        
+
         // If successful, return the event data in an ApiResponse.
         // If an error occurs, return an error response using the ReturnErrorResponse method.
         return getEventResult.Match(
@@ -43,18 +47,16 @@ public class EventsController : BaseController
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateEvent(Guid id, UpdateEventRequest model)
+    public async Task<IActionResult> UpdateEvent(Guid id, [Required] UpdateEventRequest model)
     {
-        var result = await _eventService.UpdateEvent(id.ToString(), model);
-        // todo: create a serviceResponse object mkay?
-        return result is null ? BadRequest() : Ok(model);
+        var updateEventResult = await _eventService.UpdateEvent(id.ToString(), model);
+        return updateEventResult.Match(_ => NoContent(), ReturnErrorResponse);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteEvent(Guid id)
     {
-        var isDeleted = await _eventService.DeleteEvent(id.ToString());
-        // 204 is returned when the object to be deleted doesn't even exist.
-        return isDeleted ? Ok() : NoContent();
+        var deleteEventResult = await _eventService.DeleteEvent(id.ToString());
+        return deleteEventResult.Match(_ => NoContent(), ReturnErrorResponse);
     }
 }
