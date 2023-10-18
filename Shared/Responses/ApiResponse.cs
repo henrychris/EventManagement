@@ -4,14 +4,14 @@ namespace Shared.Responses;
 
 public class ApiResponse<T>
 {
-    public ApiResponse(T? data, string message, bool status)
+    public ApiResponse(T? data, string message, bool success)
     {
         Data = data;
         Message = message;
-        Status = status;
+        Success = success;
     }
 
-    public bool Status { get; set; }
+    public bool Success { get; set; }
     public string Message { get; set; }
     public string Note { get; set; } = "N/A";
     public T? Data { get; set; }

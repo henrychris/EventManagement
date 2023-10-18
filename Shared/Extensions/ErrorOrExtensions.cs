@@ -14,7 +14,7 @@ public static class ErrorOrExtensions
     /// <remarks>Only use this for successful scenarios, else, the data property would be null.</remarks>
     public static ApiResponse<T> ToSuccessfulApiResponse<T>(this ErrorOr<T> errorOr)
     {
-        return new ApiResponse<T>(data: errorOr.Value, message: "Success", status: true);
+        return new ApiResponse<T>(data: errorOr.Value, message: "Success", success: true);
     }
 
     /// <summary>
@@ -27,6 +27,6 @@ public static class ErrorOrExtensions
     /// <remarks>Only use this for successful scenarios, else, the data property would be null.</remarks>
     public static ApiResponse<T> ToSuccessfulApiResponse<T>(this ErrorOr<T> errorOr, string message)
     {
-        return new ApiResponse<T>(data: errorOr.Value, message: message, status: true);
+        return new ApiResponse<T>(data: errorOr.Value, message: message, success: true);
     }
 }

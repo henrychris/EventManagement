@@ -10,7 +10,7 @@ public class ApiErrorResponse<T>
         Message = message;
     }
 
-    public bool Status { get; set; }
+    public bool Success { get; set; }
     public string Message { get; set; }
     public T Errors { get; set; }
 
