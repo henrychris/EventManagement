@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using Shared.UserModels;
 using Shared.UserModels.Requests;
 using Shared.UserModels.Responses;
 

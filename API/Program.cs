@@ -2,7 +2,6 @@ using System.Text;
 using EventModule;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Shared;
 using Shared.API;
 using UserModule;
 

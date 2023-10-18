@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Shared.API;
 using Shared.Extensions;
 using Shared.Responses;
-using Shared.UserModels;
 using Shared.UserModels.Requests;
 using UserModule.Interfaces;
 
