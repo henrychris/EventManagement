@@ -16,6 +16,14 @@ public class EventsController : BaseController
         _eventService = eventService;
     }
 
+    /// <summary>
+    /// Creates a new event based on the provided request data.
+    /// </summary>
+    /// <param name="model">The request data for creating the event.</param>
+    /// <returns>
+    /// - If the event is successfully created, it returns an HTTP 201 (Created) response with a link to the created event.
+    /// - If there's an error in the creation process, it returns an appropriate error response.
+    /// </returns>
     [HttpPost]
     public async Task<IActionResult> CreateEvent([Required] CreateEventRequest model)
     {
@@ -46,6 +54,16 @@ public class EventsController : BaseController
             ReturnErrorResponse);
     }
 
+
+    /// <summary>
+    /// Updates an existing event with the provided data.
+    /// </summary>
+    /// <param name="id">The unique identifier of the event to update.</param>
+    /// <param name="model">The request data for updating the event.</param>
+    /// <returns>
+    /// - If the event is successfully updated, it returns an HTTP 204 (No Content) response.
+    /// - If there's an error in the update process, it returns an appropriate error response.
+    /// </returns>
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateEvent(Guid id, [Required] UpdateEventRequest model)
     {
@@ -53,6 +71,14 @@ public class EventsController : BaseController
         return updateEventResult.Match(_ => NoContent(), ReturnErrorResponse);
     }
 
+    /// <summary>
+    /// Deletes an event with the specified unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the event to delete.</param>
+    /// <returns>
+    /// - If the event is successfully deleted, it returns an HTTP 204 (No Content) response.
+    /// - If there's an error in the deletion process, it returns an appropriate error response.
+    /// </returns>
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteEvent(Guid id)
     {
