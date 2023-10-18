@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Responses;
 
-namespace Shared;
+namespace Shared.API;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public abstract class BaseController : ControllerBase
