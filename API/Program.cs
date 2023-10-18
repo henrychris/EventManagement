@@ -3,6 +3,7 @@ using EventModule;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Shared;
+using Shared.API;
 using UserModule;
 
 var builder = WebApplication.CreateBuilder(args);

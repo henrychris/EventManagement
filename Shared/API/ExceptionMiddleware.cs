@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Shared.Responses;
 
-namespace Shared;
+namespace Shared.API;
 
 public class ExceptionMiddleware
 {

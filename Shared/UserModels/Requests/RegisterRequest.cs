@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Shared.UserModels;
+namespace Shared.UserModels.Requests;
 
 public record RegisterRequest(
     [Required, StringLength(50)]
