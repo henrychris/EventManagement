@@ -16,9 +16,8 @@ public record RegisterRequest
     public string FirstName { get; init; }
     public string LastName { get; init; }
 
-    [DataType(DataType.EmailAddress)]
-    public string EmailAddress { get; init; }
+    [DataType(DataType.EmailAddress)] public string EmailAddress { get; init; }
 
-    [DataType(DataType.Password)] public string Password { get; init; }
+    public string Password { get; init; }
     public string Role { get; init; }
 }
