@@ -2,9 +2,9 @@
 
 namespace Shared.UserModels;
 
-public class UserRoleStrings
+public static class UserRoleStrings
 {
-    public string User = UserRoles.User.ToString();
-    public string Admin = UserRoles.Admin.ToString();
-    public string Organiser = UserRoles.Organiser.ToString();
+    public static string User = UserRoles.User.ToString();
+    public static string Admin = UserRoles.Admin.ToString();
+    public static string Organiser = UserRoles.Organiser.ToString();
 }
