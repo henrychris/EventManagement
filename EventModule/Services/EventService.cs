@@ -3,7 +3,6 @@ using EventModule.Data;
 using EventModule.Data.Models;
 using EventModule.Interfaces;
 using Shared.Enums;
-using Shared.EventModels;
 using ErrorOr;
 using EventModule.ServiceErrors;
 using Shared.EventModels.Requests;

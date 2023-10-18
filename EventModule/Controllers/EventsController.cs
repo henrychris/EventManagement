@@ -2,7 +2,6 @@
 using EventModule.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Shared.API;
-using Shared.EventModels;
 using Shared.EventModels.Requests;
 using Shared.Extensions;
 

@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using Shared.EventModels;
 using Shared.EventModels.Requests;
 using Shared.EventModels.Responses;
 
