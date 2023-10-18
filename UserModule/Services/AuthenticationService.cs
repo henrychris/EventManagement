@@ -1,11 +1,13 @@
 ﻿using System.Text.Json;
 using System.Text.RegularExpressions;
 using ErrorOr;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Shared.Extensions;
 using Shared.UserModels.Requests;
 using Shared.UserModels.Responses;
 using UserModule.Data.Models;
+using UserModule.Extensions;
 using UserModule.Interfaces;
 using UserModule.ServiceErrors;
 
@@ -17,16 +19,18 @@ public class AuthenticationService : IAuthenticationService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ILogger<AuthenticationService> _logger;
+    private readonly IValidator<RegisterRequest> _validator;
 
     public AuthenticationService(ITokenService tokenService,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        ILogger<AuthenticationService> logger)
+        ILogger<AuthenticationService> logger, IValidator<RegisterRequest> validator)
     {
         _tokenService = tokenService;
         _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
+        _validator = validator;
     }
 
     public async Task<ErrorOr<UserResponse>> RegisterAsync(RegisterRequest request)
@@ -62,35 +66,8 @@ public class AuthenticationService : IAuthenticationService
 
     private ErrorOr<ApplicationUser> ValidateUser(RegisterRequest request)
     {
-        List<Error> errors = new();
-        if (string.IsNullOrEmpty(request.FirstName) || request.FirstName.Length > 50)
-        {
-            errors.Add(Errors.User.InvalidFirstName);
-        }
-
-        if (string.IsNullOrEmpty(request.LastName) || request.LastName.Length > 50)
-        {
-            errors.Add(Errors.User.InvalidLastName);
-        }
-
-        if (string.IsNullOrEmpty(request.EmailAddress))
-        {
-            errors.Add(Errors.User.MissingEmailAddress);
-        }
-
-        if (!IsValidEmailAddress(request.EmailAddress))
-        {
-            errors.Add(Errors.User.InvalidEmailAddress);
-        }
-
-        return errors.Count > 0 ? errors : MapToApplicationUser(request);
-    }
-
-    private static bool IsValidEmailAddress(string emailAddress)
-    {
-        const string pattern = @"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
-        var regex = new Regex(pattern);
-        return regex.IsMatch(emailAddress);
+        var validateResult = _validator.Validate(request);
+        return validateResult.IsValid ? MapToApplicationUser(request) : validateResult.ToErrorList();
     }
 
     public async Task<ErrorOr<UserResponse>> LoginAsync(LoginRequest request)
