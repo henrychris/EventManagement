@@ -12,6 +12,7 @@ public static class ServiceExtensions
     internal static IServiceCollection AddCore(this IServiceCollection services)
     {
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddDatabase();
         services.AddIdentityServices();
         return services;
