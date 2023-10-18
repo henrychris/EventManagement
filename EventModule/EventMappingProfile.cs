@@ -19,6 +19,7 @@ public class EventMappingProfile : Profile
             .MapRecordMember(a => a.StartTime, src => src.StartTime)
             .MapRecordMember(a => a.EndTime, src => src.EndTime)
             .MapRecordMember(a => a.Price, src => src.Price)
-            .MapRecordMember(a => a.EventStatus, src => src.EventStatus);
+            .MapRecordMember(a => a.EventStatus, src => src.EventStatus)
+            .ReverseMap();
     }
 }
