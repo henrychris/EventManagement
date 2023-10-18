@@ -1,4 +1,4 @@
-﻿namespace Shared.EventModels;
+﻿namespace Shared.EventModels.Requests;
 
 // note, for this one, the eventId should be passed as a query parameter
 public record UpdateEventRequest(

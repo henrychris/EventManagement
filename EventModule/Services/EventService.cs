@@ -6,6 +6,8 @@ using Shared.Enums;
 using Shared.EventModels;
 using ErrorOr;
 using EventModule.ServiceErrors;
+using Shared.EventModels.Requests;
+using Shared.EventModels.Responses;
 using Shared.Extensions;
 
 namespace EventModule.Services;

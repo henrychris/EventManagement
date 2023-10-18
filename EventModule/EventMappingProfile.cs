@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using EventModule.Data.Models;
 using Shared.EventModels;
+using Shared.EventModels.Requests;
+using Shared.EventModels.Responses;
 using Shared.Extensions;
 
 namespace EventModule;

@@ -1,6 +1,6 @@
 ﻿using Shared.Enums;
 
-namespace Shared.EventModels;
+namespace Shared.EventModels.Responses;
 
 public record EventResponse(string Guid,
     string Name,
