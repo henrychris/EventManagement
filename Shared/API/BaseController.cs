@@ -34,7 +34,15 @@ public abstract class BaseController : ControllerBase
             _ => StatusCodes.Status500InternalServerError
         };
 
-        return new ObjectResult(new ApiErrorResponse<List<Error>>(errors, firstError.Description))
+        var problemDetails = new ApiErrorResponse<object>(
+            errors.ToDictionary(e => e.Code,
+                e => new[]
+                {
+                    e.Description
+                }),
+            message: firstError.Description);
+
+        return new ObjectResult(problemDetails)
         {
             StatusCode = statusCode
         };
