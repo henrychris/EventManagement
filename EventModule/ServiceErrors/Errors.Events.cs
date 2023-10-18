@@ -10,6 +10,14 @@ public static class Errors
             code: "Event.NotFound",
             description: "Event not found.");
 
+        public static Error MissingEventName => Error.Validation(
+            code: "Event.MissingEventName",
+            description: "The event has no name.");
+
+        public static Error MissingEventDescription => Error.Validation(
+            code: "Event.MissingEventDescription",
+            description: "The event has no description.");
+
         public static Error InvalidEventDate => Error.Validation(
             code: "Event.InvalidEventDate",
             description: "The event can't start in the past.");
