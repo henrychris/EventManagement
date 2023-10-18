@@ -4,10 +4,11 @@
     <option name="keyValueStorage">
       <map>
         <entry key="Common:buildConfiguration" value="Debug" />
+        <entry key="Common:e26d9890-b111-487f-a534-846a0350fc1e:dbContext" value="UserModule.Data.UserDbContext" />
         <entry key="Common:fd0468be-2e24-476f-9081-584507148476:dbContext" value="EventModule.Data.EventDbContext" />
         <entry key="Common:noBuild" value="false" />
         <entry key="Common:outputFolder" value="Migrations" />
-        <entry key="Common:useDefaultConnection" value="false" />
+        <entry key="Common:useDefaultConnection" value="true" />
       </map>
     </option>
   </component>

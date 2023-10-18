@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EventModule.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.EventModels;
@@ -7,6 +8,7 @@ using Shared.Extensions;
 
 namespace EventModule.Controllers;
 
+[Authorize]
 public class EventsController : BaseController
 {
     private readonly IEventService _eventService;

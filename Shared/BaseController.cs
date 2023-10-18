@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Responses;
 
@@ -6,7 +7,7 @@ namespace Shared;
 
 [ApiController]
 [Route("[controller]")]
-public class BaseController : ControllerBase
+public abstract class BaseController : ControllerBase
 {
     protected static IActionResult ReturnErrorResponse(List<Error> errors)
     {

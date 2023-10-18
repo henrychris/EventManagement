@@ -23,24 +23,29 @@ public class ExceptionMiddleware
         // can catch specific exceptions here.
         catch (Exception ex)
         {
-            var http = httpContext.GetEndpoint()?.DisplayName?.Split(" => ")[0] ?? httpContext.Request.Path.ToString();
-            var httpMethod = httpContext.Request.Method;
-            var type = ex.GetType().Name;
-            var error = ex.Message;
-            var msg =
-                $"""
-                 Something went wrong.
-                 =================================
-                 ENDPOINT: {http}
-                 METHOD: {httpMethod}
-                 TYPE: {type}
-                 REASON: {error}
-                 ---------------------------------
-                 {ex.StackTrace}
-                 """;
-            _logger.LogError("{@msg}", msg);
-            await HandleExceptionAsync(httpContext, error);
+            LogException(httpContext, ex);
+            await HandleExceptionAsync(httpContext, ex.Message);
         }
+    }
+
+    private void LogException(HttpContext httpContext, Exception ex)
+    {
+        var http = httpContext.GetEndpoint()?.DisplayName?.Split(" => ")[0] ?? httpContext.Request.Path.ToString();
+        var httpMethod = httpContext.Request.Method;
+        var type = ex.GetType().Name;
+        var error = ex.Message;
+        var msg =
+            $"""
+             Something went wrong.
+             =================================
+             ENDPOINT: {http}
+             METHOD: {httpMethod}
+             TYPE: {type}
+             REASON: {error}
+             ---------------------------------
+             {ex.StackTrace}
+             """;
+        _logger.LogError("{@msg}", msg);
     }
 
     private static async Task HandleExceptionAsync(HttpContext context, string errorMessage)
