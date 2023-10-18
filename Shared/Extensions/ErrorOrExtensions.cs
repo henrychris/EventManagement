@@ -29,4 +29,9 @@ public static class ErrorOrExtensions
     {
         return new ApiResponse<T>(data: errorOr.Value, message: message, success: true);
     }
+
+    public static bool HasErrors<T>(this ErrorOr<T> errorOr)
+    {
+        return errorOr.Errors.Count > 0;
+    }
 }

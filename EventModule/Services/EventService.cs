@@ -6,6 +6,7 @@ using Shared.Enums;
 using Shared.EventModels;
 using ErrorOr;
 using EventModule.ServiceErrors;
+using Shared.Extensions;
 
 namespace EventModule.Services;
 
@@ -23,7 +24,7 @@ public class EventService : IEventService
     public async Task<ErrorOr<EventResponse>> CreateEvent(CreateEventRequest request)
     {
         var validateEventResult = ValidateEvent(request);
-        if (validateEventResult.IsError)
+        if (validateEventResult.HasErrors())
         {
             return validateEventResult.Errors;
         }
