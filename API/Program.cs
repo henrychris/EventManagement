@@ -1,9 +1,12 @@
+using System.Reflection;
 using System.Text;
 using EventModule;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Shared.API;
 using UserModule;
+using UserModule.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEventModule();
 builder.Services.AddUserModule();
+// todo: check how well this works when i have validators in EventModule
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>(ServiceLifetime.Transient);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
