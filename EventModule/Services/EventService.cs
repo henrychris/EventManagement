@@ -48,31 +48,66 @@ public class EventService : IEventService
             return Errors.Event.NotFound;
         }
 
-        existingEvent.Name = string.IsNullOrEmpty(request.Name) ? existingEvent.Name : request.Name;
-        existingEvent.Description =
-            string.IsNullOrEmpty(request.Description) ? existingEvent.Description : request.Description;
-
-        if (request.Price != null)
+        var errors = new List<Error>();
+        if (!string.IsNullOrEmpty(request.Name))
         {
-            existingEvent.Price = request.Price.Value;
+            existingEvent.Name = request.Name;
         }
 
-        if (request.Date != null)
+        if (!string.IsNullOrEmpty(request.Description))
         {
-            existingEvent.Date = request.Date.Value;
+            existingEvent.Description = request.Description;
         }
 
-        if (request.StartTime != null)
+        if (request.Price.HasValue)
         {
-            existingEvent.StartTime = request.StartTime.Value;
+            if (request.Price < 0)
+            {
+                errors.Add(Errors.Event.InvalidTicketPrice);
+            }
+            else
+            {
+                existingEvent.Price = request.Price.Value;
+            }
         }
 
-        if (request.EndTime != null)
+        if (request.Date.HasValue)
         {
-            existingEvent.EndTime = request.EndTime.Value;
+            if (request.Date < DateTime.UtcNow)
+            {
+                errors.Add(Errors.Event.InvalidEventDate);
+            }
+            else
+            {
+                existingEvent.Date = request.Date.Value;
+            }
         }
 
-        if (request.EventStatus != null)
+        if (request.StartTime.HasValue)
+        {
+            if (request.StartTime < existingEvent.Date)
+            {
+                errors.Add(Errors.Event.InvalidEventStartTime);
+            }
+            else
+            {
+                existingEvent.StartTime = request.StartTime.Value;
+            }
+        }
+
+        if (request.EndTime.HasValue)
+        {
+            if (request.EndTime < existingEvent.Date || request.EndTime < existingEvent.StartTime)
+            {
+                errors.Add(Errors.Event.InvalidEventEndTime);
+            }
+            else
+            {
+                existingEvent.EndTime = request.EndTime.Value;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(request.EventStatus))
         {
             if (Enum.TryParse(request.EventStatus, out EventStatus status))
             {
@@ -80,10 +115,13 @@ public class EventService : IEventService
             }
             else
             {
-                // Handle the case where the provided EventStatus is not a valid enum value.
-                // store the enum string as in EventStatus
                 throw new Exception("Invalid Event State.");
             }
+        }
+
+        if (errors.Count > 0)
+        {
+            return errors;
         }
 
         await _dbContext.SaveChangesAsync();
@@ -106,6 +144,16 @@ public class EventService : IEventService
     private static ErrorOr<Event> ValidateEvent(CreateEventRequest request)
     {
         List<Error> errors = new();
+
+        if (string.IsNullOrEmpty(request.Name))
+        {
+            errors.Add(Errors.Event.MissingEventName);
+        }
+
+        if (string.IsNullOrEmpty(request.Description))
+        {
+            errors.Add(Errors.Event.MissingEventDescription);
+        }
 
         if (request.Date < DateTime.UtcNow)
         {
