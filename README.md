@@ -17,7 +17,7 @@ The EventModule is a class library responsible for handling event-related servic
 The UserModule is a class library that focuses on user-related services. This module defines data models, business logic, and data access operations related to users.
 
 ## Shared
-The Shared part is a class library that contains shared packages, entities, and code used by multiple modules. It serves as a central repository for common resources that can be reused across different parts of the application.
+The Shared project is a class library that contains packages, entities, and code used by other modules. It serves as a central repository for common resources that can be reused across different parts of the application.
 
 ### Features
 
