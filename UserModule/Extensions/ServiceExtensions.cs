@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserModule.Data;
 using UserModule.Data.Models;
 using UserModule.Interfaces;
 using UserModule.Services;
+using UserModule.Validators;
 
 namespace UserModule.Extensions;
 
@@ -15,6 +17,7 @@ public static class ServiceExtensions
         services.AddScoped<ITokenService, TokenService>();
         services.AddDatabase();
         services.AddIdentityServices();
+        services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>(ServiceLifetime.Transient);
         return services;
     }
 
