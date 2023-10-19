@@ -5,6 +5,7 @@ using EventModule.Interfaces;
 using Shared.Enums;
 using ErrorOr;
 using EventModule.ServiceErrors;
+using FluentValidation;
 using Shared.EventModels.Requests;
 using Shared.EventModels.Responses;
 using Shared.Extensions;
@@ -15,19 +16,21 @@ public class EventService : IEventService
 {
     private readonly EventDbContext _dbContext;
     private readonly IMapper _mapper;
+    private readonly IValidator<CreateEventRequest> _validator;
 
-    public EventService(EventDbContext dbContext, IMapper mapper)
+    public EventService(EventDbContext dbContext, IMapper mapper, IValidator<CreateEventRequest> validator)
     {
         _dbContext = dbContext;
         _mapper = mapper;
+        _validator = validator;
     }
 
     public async Task<ErrorOr<EventResponse>> CreateEvent(CreateEventRequest request)
     {
-        var validateEventResult = ValidateEvent(request);
-        if (validateEventResult.HasErrors())
+        var validateEventResult = await _validator.ValidateAsync(request);
+        if (!validateEventResult.IsValid)
         {
-            return validateEventResult.Errors;
+            return validateEventResult.ToErrorList();
         }
 
         var newEvent = _mapper.Map<Event>(request);
@@ -50,6 +53,7 @@ public class EventService : IEventService
             return Errors.Event.NotFound;
         }
 
+        // todo: make all the changes, and validate the final Event object. then return errors if something is iffy.
         var errors = new List<Error>();
         if (!string.IsNullOrEmpty(request.Name))
         {
@@ -141,52 +145,5 @@ public class EventService : IEventService
         _dbContext.Events.Remove(entityToRemove);
         await _dbContext.SaveChangesAsync();
         return Result.Deleted;
-    }
-
-    private static ErrorOr<Event> ValidateEvent(CreateEventRequest request)
-    {
-        List<Error> errors = new();
-
-        if (string.IsNullOrEmpty(request.Name))
-        {
-            errors.Add(Errors.Event.MissingEventName);
-        }
-
-        if (request.Name.Length is < Event.MinNameLength or > Event.MaxNameLength)
-        {
-            errors.Add(Errors.Event.InvalidName);
-        }
-
-        if (request.Description.Length is < Event.MinDescriptionLength or > Event.MaxDescriptionLength)
-        {
-            errors.Add(Errors.Event.InvalidDescription);
-        }
-
-        if (string.IsNullOrEmpty(request.Description))
-        {
-            errors.Add(Errors.Event.MissingEventDescription);
-        }
-
-        if (request.Date < DateTime.UtcNow)
-        {
-            errors.Add(Errors.Event.InvalidEventDate);
-        }
-
-        if (request.StartTime < request.Date)
-        {
-            errors.Add(Errors.Event.InvalidEventStartTime);
-        }
-
-        if (request.EndTime < request.Date || request.EndTime < request.StartTime)
-        {
-            errors.Add(Errors.Event.InvalidEventEndTime);
-        }
-
-        if (request.Price < 0)
-        {
-            errors.Add(Errors.Event.InvalidTicketPrice);
-        }
-
-        return errors;
     }
 }
