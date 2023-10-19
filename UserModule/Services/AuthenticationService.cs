@@ -61,7 +61,10 @@ public class AuthenticationService : IAuthenticationService
                 AccessToken: _tokenService.CreateUserJwt(newUser.Email!, newUser.Role, newUser.Id));
         }
 
-        var errors = result.Errors.Select(error => Error.Validation("User." + error.Code, error.Description)).ToList();
+        var errors = result.Errors
+            .Select(error => Error.Validation("User." + error.Code, error.Description))
+            .ToList();
+        
         return errors;
     }
 
