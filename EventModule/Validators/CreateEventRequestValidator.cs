@@ -5,6 +5,9 @@ using Shared.EventModels.Requests;
 
 namespace EventModule.Validators;
 
+/// <summary>
+/// Validator for the CreateEventRequest class.
+/// </summary>
 public class CreateEventRequestValidator : AbstractValidator<CreateEventRequest>
 {
     public CreateEventRequestValidator()

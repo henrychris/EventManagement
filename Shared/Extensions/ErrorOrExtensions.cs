@@ -30,6 +30,12 @@ public static class ErrorOrExtensions
         return new ApiResponse<T>(data: errorOr.Value, message: message, success: true);
     }
 
+    /// <summary>
+    /// Determines whether the specified ErrorOr instance has any errors.
+    /// </summary>
+    /// <typeparam name="T">The type of the value in the ErrorOr instance.</typeparam>
+    /// <param name="errorOr">The ErrorOr instance to check for errors.</param>
+    /// <returns>true if the ErrorOr instance has errors; otherwise, false.</returns>
     public static bool HasErrors<T>(this ErrorOr<T> errorOr)
     {
         return errorOr.Errors.Count > 0;

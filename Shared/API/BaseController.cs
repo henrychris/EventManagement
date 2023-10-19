@@ -10,6 +10,11 @@ namespace Shared.API;
 [Route("[controller]")]
 public abstract class BaseController : ControllerBase
 {
+    /// <summary>
+    /// Returns an IActionResult object based on the list of errors passed as parameter.
+    /// </summary>
+    /// <param name="errors">List of errors to be handled.</param>
+    /// <returns>An IActionResult object based on the type of errors.</returns>
     protected static IActionResult ReturnErrorResponse(List<Error> errors)
     {
         if (errors.All(e => e.Type == ErrorType.Validation))
@@ -48,6 +53,11 @@ public abstract class BaseController : ControllerBase
         };
     }
 
+    /// <summary>
+    /// Creates a validation error response with the given list of errors.
+    /// </summary>
+    /// <param name="errors">The list of errors to include in the response.</param>
+    /// <returns>An IActionResult representing the validation error response.</returns>
     private static IActionResult CreateValidationError(List<Error> errors)
     {
         var problemDetails = new ApiErrorResponse<object>(
