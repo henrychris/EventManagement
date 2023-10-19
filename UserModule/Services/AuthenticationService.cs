@@ -41,14 +41,14 @@ public class AuthenticationService : IAuthenticationService
             return Errors.User.DuplicateEmail;
         }
 
-        var validateResult = ValidateUser(request);
-        if (validateResult.HasErrors())
+        var validateResult = await _validator.ValidateAsync(request);
+        if (!validateResult.IsValid)
         {
-            return validateResult.Errors;
+            return validateResult.ToErrorList();
         }
 
-        var newUser = validateResult.Value;
-        var result = await _userManager.CreateAsync(validateResult.Value, request.Password);
+        var newUser = MapToApplicationUser(request);
+        var result = await _userManager.CreateAsync(newUser, request.Password);
         if (result.Succeeded)
         {
             await _userManager.AddToRoleAsync(newUser, newUser.Role);
@@ -63,12 +63,6 @@ public class AuthenticationService : IAuthenticationService
 
         var errors = result.Errors.Select(error => Error.Validation("User." + error.Code, error.Description)).ToList();
         return errors;
-    }
-
-    private ErrorOr<ApplicationUser> ValidateUser(RegisterRequest request)
-    {
-        var validateResult = _validator.Validate(request);
-        return validateResult.IsValid ? MapToApplicationUser(request) : validateResult.ToErrorList();
     }
 
     public async Task<ErrorOr<UserResponse>> LoginAsync(LoginRequest request)
