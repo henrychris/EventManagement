@@ -51,6 +51,7 @@ public class AuthenticationService : IAuthenticationService
         var result = await _userManager.CreateAsync(validateResult.Value, request.Password);
         if (result.Succeeded)
         {
+            await _userManager.AddToRoleAsync(newUser, newUser.Role);
             return new UserResponse(Id: newUser.Id,
                 FirstName: newUser.FirstName,
                 LastName: newUser.LastName,
