@@ -1,9 +1,9 @@
 ﻿namespace Shared.UserModels.Responses;
 
-public record UserResponse(
-    string Id,
+public record UserAuthResponse(string Id,
     string FirstName,
     string LastName,
     string EmailAddress,
     decimal WalletBalance,
-    string Role);
+    string Role,
+    string AccessToken);

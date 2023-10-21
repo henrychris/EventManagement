@@ -6,6 +6,6 @@ namespace UserModule.Interfaces;
 
 public interface IAuthenticationService
 {
-    Task<ErrorOr<UserResponse>> RegisterAsync(RegisterRequest request);
-    Task<ErrorOr<UserResponse>> LoginAsync(LoginRequest request);
+    Task<ErrorOr<UserAuthResponse>> RegisterAsync(RegisterRequest request);
+    Task<ErrorOr<UserAuthResponse>> LoginAsync(LoginRequest request);
 }

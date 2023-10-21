@@ -33,7 +33,7 @@ public class AuthenticationService : IAuthenticationService
         _validator = validator;
     }
 
-    public async Task<ErrorOr<UserResponse>> RegisterAsync(RegisterRequest request)
+    public async Task<ErrorOr<UserAuthResponse>> RegisterAsync(RegisterRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.EmailAddress);
         if (user is not null)
@@ -52,7 +52,7 @@ public class AuthenticationService : IAuthenticationService
         if (result.Succeeded)
         {
             await _userManager.AddToRoleAsync(newUser, newUser.Role);
-            return new UserResponse(Id: newUser.Id,
+            return new UserAuthResponse(Id: newUser.Id,
                 FirstName: newUser.FirstName,
                 LastName: newUser.LastName,
                 EmailAddress: newUser.Email!,
@@ -68,7 +68,7 @@ public class AuthenticationService : IAuthenticationService
         return errors;
     }
 
-    public async Task<ErrorOr<UserResponse>> LoginAsync(LoginRequest request)
+    public async Task<ErrorOr<UserAuthResponse>> LoginAsync(LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.EmailAddress);
         if (user is null)
@@ -80,7 +80,7 @@ public class AuthenticationService : IAuthenticationService
         if (signInResult.Succeeded)
         {
             _logger.LogInformation($"User {user.Id} logged in successfully.");
-            return new UserResponse(Id: user.Id,
+            return new UserAuthResponse(Id: user.Id,
                 FirstName: user.FirstName,
                 LastName: user.LastName,
                 EmailAddress: user.Email!,
