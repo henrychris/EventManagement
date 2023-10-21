@@ -9,7 +9,7 @@ using UserModule.Validators;
 
 namespace UserModule.Extensions;
 
-public static class ServiceExtensions
+public static class UserServiceExtensions
 {
     internal static IServiceCollection AddCore(this IServiceCollection services)
     {

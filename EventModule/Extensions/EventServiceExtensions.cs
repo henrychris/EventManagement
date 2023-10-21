@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventModule.Extensions;
 
-public static class ServiceExtensions
+public static class EventServiceExtensions
 {
     internal static IServiceCollection AddCore(this IServiceCollection services)
     {
