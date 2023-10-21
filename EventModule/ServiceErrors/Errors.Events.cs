@@ -42,7 +42,7 @@ public static class Errors
 
         public static Error InvalidTicketPrice => Error.Validation(
             code: "Event.InvalidTicketPrice",
-            description: "The ticket price must be greater than zero.");
+            description: "The ticket price must be greater than, or equal to zero.");
 
         // todo: add invalid capacity error
     }
