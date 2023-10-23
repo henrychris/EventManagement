@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EventModule.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.API;
+using Shared.Enums;
 using Shared.EventModels.Requests;
 using Shared.Extensions;
+using Shared.UserModels;
 
 namespace EventModule.Controllers;
 
@@ -24,6 +27,8 @@ public class EventsController : BaseController
     /// - If the event is successfully created, it returns an HTTP 201 (Created) response with a link to the created event.
     /// - If there's an error in the creation process, it returns an appropriate error response.
     /// </returns>
+    [Authorize(Roles = UserRoleStrings.Admin)]
+    [Authorize(Roles = UserRoleStrings.User)]
     [HttpPost]
     public async Task<IActionResult> CreateEvent([Required] CreateEventRequest model)
     {
