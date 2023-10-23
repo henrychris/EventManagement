@@ -12,7 +12,7 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
     }
 
     private EventDbContext EventDbContext => Context as EventDbContext ??
-                                             throw new InvalidCastException("DB Context not passed from unit of work.");
+                                             throw new InvalidCastException("Event DB Context not passed from unit of work.");
 
     public async Task<IEnumerable<Event>> GetEventsWithAvailableTickets()
     {
