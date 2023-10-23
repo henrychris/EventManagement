@@ -8,6 +8,6 @@ public static partial class Errors
     {
         public static Error LoginFailed => Error.Unauthorized(
             code: "Auth.LoginFailed",
-            description: "Login failed. Please try again later.");
+            description: "Username or password are incorrect.");
     }
 }
