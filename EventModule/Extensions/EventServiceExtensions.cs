@@ -1,5 +1,6 @@
 ﻿using EventModule.Data;
 using EventModule.Interfaces;
+using EventModule.Repositories;
 using EventModule.Services;
 using EventModule.Validators;
 using FluentValidation;
@@ -15,6 +16,7 @@ public static class EventServiceExtensions
         services.AddAutoMapper(typeof(EventMappingProfile));
         services.AddValidatorsFromAssemblyContaining<CreateEventRequestValidator>(ServiceLifetime.Transient);
         services.AddDatabase();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
 
