@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using UserModule.Data;
 using UserModule.Data.Models;
 using UserModule.Interfaces;
+using UserModule.Repositories;
 using UserModule.Services;
 using UserModule.Validators;
 
@@ -16,6 +17,7 @@ public static class UserServiceExtensions
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddDatabase();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddIdentityServices();
         services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>(ServiceLifetime.Transient);
         return services;
