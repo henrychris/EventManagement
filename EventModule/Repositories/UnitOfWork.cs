@@ -6,11 +6,13 @@ namespace EventModule.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly EventDbContext _context;
+    private readonly ILogger<UnitOfWork> _logger;
     private IDbContextTransaction? _transaction;
 
-    public UnitOfWork(EventDbContext context)
+    public UnitOfWork(EventDbContext context, ILogger<UnitOfWork> logger)
     {
         _context = context;
+        _logger = logger;
         Events ??= new EventRepository(_context);
     }
 
@@ -19,6 +21,7 @@ public class UnitOfWork : IUnitOfWork
     public void BeginTransaction()
     {
         _transaction = _context.Database.BeginTransaction();
+        _logger.LogInformation("Transaction started.");
     }
 
     public void Commit()
@@ -32,9 +35,11 @@ public class UnitOfWork : IUnitOfWork
         {
             _context.SaveChanges();
             _transaction.Commit();
+            _logger.LogInformation("Transaction committed.");
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error occurred during transaction commit. Rolling back...");
             Rollback();
             throw;
         }
@@ -54,6 +59,7 @@ public class UnitOfWork : IUnitOfWork
         else
         {
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Changes saved to the database.");
         }
     }
 
@@ -67,10 +73,12 @@ public class UnitOfWork : IUnitOfWork
         _transaction.Rollback();
         _transaction.Dispose();
         _transaction = null;
+        _logger.LogWarning("Transaction rolled back.");
     }
 
     public void Dispose()
     {
         _context.Dispose();
+        _logger.LogInformation("UnitOfWork disposed, database context released.");
     }
 }
