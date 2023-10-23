@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using EventModule.Data;
 using EventModule.Data.Models;
 using EventModule.Interfaces;
 using Shared.Enums;
 using ErrorOr;
+using EventModule.Repositories;
 using EventModule.ServiceErrors;
 using FluentValidation;
 using Shared.EventModels.Requests;
@@ -14,15 +14,16 @@ namespace EventModule.Services;
 
 public class EventService : IEventService
 {
-    private readonly EventDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly IValidator<CreateEventRequest> _validator;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public EventService(EventDbContext dbContext, IMapper mapper, IValidator<CreateEventRequest> validator)
+    public EventService(IMapper mapper, IValidator<CreateEventRequest> validator,
+        IUnitOfWork unitOfWork)
     {
-        _dbContext = dbContext;
         _mapper = mapper;
         _validator = validator;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ErrorOr<EventResponse>> CreateEvent(CreateEventRequest request)
@@ -34,20 +35,20 @@ public class EventService : IEventService
         }
 
         var newEvent = _mapper.Map<Event>(request);
-        await _dbContext.Events.AddAsync(newEvent);
-        await _dbContext.SaveChangesAsync();
+        await _unitOfWork.Events.AddAsync(newEvent);
+        await _unitOfWork.CompleteAsync();
         return _mapper.Map<EventResponse>(newEvent);
     }
 
     public async Task<ErrorOr<EventResponse>> GetEvent(string id)
     {
-        var result = await _dbContext.Events.FindAsync(id);
+        var result = await _unitOfWork.Events.GetByIdAsync(id);
         return result is not null ? _mapper.Map<EventResponse>(result) : Errors.Event.NotFound;
     }
 
     public async Task<ErrorOr<EventResponse>> UpdateEvent(string id, UpdateEventRequest request)
     {
-        var existingEvent = await _dbContext.Events.FindAsync(id);
+        var existingEvent = await _unitOfWork.Events.GetByIdAsync(id);
         if (existingEvent is null)
         {
             return Errors.Event.NotFound;
@@ -130,20 +131,21 @@ public class EventService : IEventService
             return errors;
         }
 
-        await _dbContext.SaveChangesAsync();
+        _unitOfWork.Events.Update(existingEvent);
+        await _unitOfWork.CompleteAsync();
         return _mapper.Map<EventResponse>(existingEvent);
     }
 
     public async Task<ErrorOr<Deleted>> DeleteEvent(string id)
     {
-        var entityToRemove = await _dbContext.Events.FindAsync(id);
+        var entityToRemove = await _unitOfWork.Events.GetByIdAsync(id);
         if (entityToRemove is null)
         {
             return Errors.Event.NotFound;
         }
 
-        _dbContext.Events.Remove(entityToRemove);
-        await _dbContext.SaveChangesAsync();
+        _unitOfWork.Events.Remove(entityToRemove);
+        await _unitOfWork.CompleteAsync();
         return Result.Deleted;
     }
 }
