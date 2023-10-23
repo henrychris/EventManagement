@@ -9,12 +9,12 @@ using UserModule.Interfaces;
 
 namespace UserModule.Controllers;
 
-public class AuthenticationController : BaseController
+public class AuthController : BaseController
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly ITokenService _tokenService;
 
-    public AuthenticationController(IAuthenticationService authenticationService, ITokenService tokenService)
+    public AuthController(IAuthenticationService authenticationService, ITokenService tokenService)
     {
         _authenticationService = authenticationService;
         _tokenService = tokenService;
