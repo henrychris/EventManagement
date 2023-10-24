@@ -27,7 +27,7 @@ public class TokenService : ITokenService
         {
             new(JwtClaims.Email, emailAddress),
             new(JwtClaims.UserId, userId),
-            new(JwtClaims.UserRole, userRole)
+            new(JwtClaims.Role, userRole)
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor
