@@ -3,6 +3,7 @@ using EventModule;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Shared.API;
+using Shared.UserModels;
 using UserModule;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +24,7 @@ builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
     })
     .AddJwtBearer(
         x =>
@@ -37,7 +38,8 @@ builder.Services.AddAuthentication(options =>
                 ValidateAudience = true,
                 ValidateIssuer = true,
                 ValidateLifetime = true,
-                ValidateIssuerSigningKey = true
+                ValidateIssuerSigningKey = true,
+                RoleClaimType = JwtClaims.Role
             };
         });
 builder.Services.AddAuthorization();

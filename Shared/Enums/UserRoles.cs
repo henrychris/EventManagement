@@ -13,4 +13,6 @@ public static class UserRoleStrings
 {
     public const string User = "User";
     public const string Admin = "Admin";
+    public const string AdminAndUserRoles = "Admin,User";
+
 }
