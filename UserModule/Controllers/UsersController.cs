@@ -1,8 +1,6 @@
-﻿using ErrorOr;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shared.API;
 using Shared.Extensions;
-using Shared.UserModels.Responses;
 using UserModule.Interfaces;
 
 namespace UserModule.Controllers;

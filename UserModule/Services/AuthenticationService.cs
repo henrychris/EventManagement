@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.RegularExpressions;
 using ErrorOr;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +6,6 @@ using Shared.Extensions;
 using Shared.UserModels.Requests;
 using Shared.UserModels.Responses;
 using UserModule.Data.Models;
-using UserModule.Extensions;
 using UserModule.Interfaces;
 using UserModule.ServiceErrors;
 
