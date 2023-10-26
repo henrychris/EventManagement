@@ -8,6 +8,8 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
     public RegisterRequestValidator()
     {
+        RuleFor(x => x)
+            .NotEmpty();
         RuleFor(x => x.FirstName).NotEmpty().Length(3, 50)
             .WithErrorCode(Errors.User.InvalidFirstName.Code)
             .WithMessage(Errors.User.InvalidFirstName.Description);

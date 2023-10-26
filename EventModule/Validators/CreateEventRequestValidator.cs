@@ -12,6 +12,8 @@ public class CreateEventRequestValidator : AbstractValidator<CreateEventRequest>
 {
     public CreateEventRequestValidator()
     {
+        RuleFor(request => request)
+            .NotEmpty();
         RuleFor(request => request.Name)
             .NotEmpty()
             .WithMessage(Errors.Event.MissingEventName.Description)
