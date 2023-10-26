@@ -60,6 +60,8 @@ public class AuthenticationServiceTests
             "User"
         );
 
+        _validatorMock.Setup(x => x.ValidateAsync(It.IsAny<RegisterRequest>(), new CancellationToken()))
+            .ReturnsAsync(new ValidationResult());
         _userManagerMock.Setup(x => x.FindByEmailAsync(request.EmailAddress))
             .ReturnsAsync(new ApplicationUser());
 

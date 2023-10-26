@@ -33,18 +33,18 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<ErrorOr<UserAuthResponse>> RegisterAsync(RegisterRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.EmailAddress);
-        if (user is not null)
-        {
-            return Errors.User.DuplicateEmail;
-        }
-
         var validateResult = await _validator.ValidateAsync(request);
         if (!validateResult.IsValid)
         {
             return validateResult.ToErrorList();
         }
-
+        
+        var user = await _userManager.FindByEmailAsync(request.EmailAddress);
+        if (user is not null)
+        {
+            return Errors.User.DuplicateEmail;
+        }
+        
         var newUser = MapToApplicationUser(request);
         var result = await _userManager.CreateAsync(newUser, request.Password);
         if (result.Succeeded)
