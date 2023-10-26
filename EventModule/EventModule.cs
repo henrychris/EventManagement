@@ -4,14 +4,12 @@ namespace EventModule;
 
 public static class EventModule
 {
-    public static IServiceCollection AddEventModule(this IServiceCollection services)
+    public static void AddEventModule(this IServiceCollection services)
     {
         services.AddCore();
-        return services;
     }
 
-    public static IApplicationBuilder UseEventModule(this IApplicationBuilder app)
+    public static void UseEventModule(this IApplicationBuilder app)
     {
-        return app;
     }
 }

@@ -12,18 +12,33 @@ namespace UserModule.Extensions;
 
 public static class UserServiceExtensions
 {
-    internal static IServiceCollection AddCore(this IServiceCollection services)
+    /// <summary>
+    /// Adds core services for the user module.
+    /// </summary>
+    /// <param name="services">The IServiceCollection to add the services to.</param>
+    internal static void AddCore(this IServiceCollection services)
+    {
+        AddDatabase(services);
+        AddMSIdentity(services);
+        RegisterCustomDependencies(services);
+        services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>(ServiceLifetime.Transient);
+    }
+
+    /// <summary>
+    /// Registers custom dependencies to the IServiceCollection.
+    /// </summary>
+    /// <param name="services">The IServiceCollection to register the dependencies to.</param>
+    private static void RegisterCustomDependencies(IServiceCollection services)
     {
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<ITokenService, TokenService>();
-        services.AddDatabase();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddIdentityServices();
-        services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>(ServiceLifetime.Transient);
-        return services;
     }
 
-    private static IServiceCollection AddDatabase(this IServiceCollection services)
+    /// <summary>
+    /// Registers the database and unit of work used in the application.
+    /// </summary>
+    /// <param name="services">The IServiceCollection.</param>
+    private static void AddDatabase(IServiceCollection services)
     {
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false)
@@ -31,10 +46,11 @@ public static class UserServiceExtensions
 
         services.AddDbContext<UserDbContext>(options =>
             options.UseSqlite(config["ConnectionStrings:UserConnection"]));
-        return services;
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
-    private static IServiceCollection AddIdentityServices(this IServiceCollection services)
+    private static void AddMSIdentity(IServiceCollection services)
     {
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
@@ -51,7 +67,5 @@ public static class UserServiceExtensions
                 options.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<UserDbContext>()
             .AddDefaultTokenProviders();
-
-        return services;
     }
 }

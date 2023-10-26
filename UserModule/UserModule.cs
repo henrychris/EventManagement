@@ -4,14 +4,12 @@ namespace UserModule;
 
 public static class UserModule
 {
-    public static IServiceCollection AddUserModule(this IServiceCollection services)
+    public static void AddUserModule(this IServiceCollection services)
     {
         services.AddCore();
-        return services;
     }
 
-    public static IApplicationBuilder UseUserModule(this IApplicationBuilder app)
+    public static void UseUserModule(this IApplicationBuilder app)
     {
-        return app;
     }
 }
