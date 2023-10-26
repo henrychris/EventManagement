@@ -1,7 +1,9 @@
 ﻿using System.Text;
 using EventModule;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Filters;
 using Shared.UserModels;
 using UserModule;
 
@@ -19,6 +21,7 @@ public static class ServiceInitializer
         RegisterModules(services);
         RegisterSwagger(services);
         SetupAuth(services);
+        RegisterCustomDependencies(services);
     }
 
     /// <summary>
@@ -85,5 +88,14 @@ public static class ServiceInitializer
     {
         services.AddControllers();
         services.AddRouting(options => options.LowercaseUrls = true);
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
+    }
+
+    private static void RegisterCustomDependencies(IServiceCollection services)
+    {
+        services.AddScoped<CustomValidationFilter>();
     }
 }

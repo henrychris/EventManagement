@@ -1,12 +1,14 @@
 ﻿using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Filters;
 using Shared.Responses;
 
 namespace Shared.API;
 
 [Authorize]
 [ApiController]
+[TypeFilter(typeof(CustomValidationFilter))]
 [Route("[controller]")]
 public abstract class BaseController : ControllerBase
 {
