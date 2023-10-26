@@ -7,3 +7,6 @@ var app = builder.Build();
 app.ConfigureMiddleware();
 
 app.Run();
+
+// This is used for the integration tests.
+public partial class Program {}
