@@ -10,10 +10,11 @@ namespace UserModule.Tests.Services;
 [TestFixture]
 public class UserServiceTests
 {
-    private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
-    private readonly UserService _userService;
+    private Mock<UserManager<ApplicationUser>> _userManagerMock;
+    private UserService _userService;
 
-    public UserServiceTests()
+    [SetUp]
+    public void Setup()
     {
         _userManagerMock = new Mock<UserManager<ApplicationUser>>(Mock.Of<IUserStore<ApplicationUser>>(), null!, null!,
             null!, null!, null!, null!, null!, null!);
