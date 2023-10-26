@@ -12,10 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventModule.Tests", "EventM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserModule.Tests", "UserModule.Tests\UserModule.Tests.csproj", "{C4F2A63E-6C3E-4C7D-A6AE-F36DD5AF0AEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserModule.IntegrationTests", "UserModule.IntegrationTests\UserModule.IntegrationTests.csproj", "{A10CBBEA-B0A1-48D4-8EC4-4EFFBF4F01C7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventModule.IntegrationTests", "EventModule.IntegrationTests\EventModule.IntegrationTests.csproj", "{9578D18E-95CD-4053-A909-AF9FEA8D3F9E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.IntegrationTests", "API.IntegrationTests\API.IntegrationTests.csproj", "{11134D0D-CF2B-4093-8311-E7D3876B326E}"
 EndProject
 Global
@@ -48,14 +44,6 @@ Global
 		{C4F2A63E-6C3E-4C7D-A6AE-F36DD5AF0AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4F2A63E-6C3E-4C7D-A6AE-F36DD5AF0AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4F2A63E-6C3E-4C7D-A6AE-F36DD5AF0AEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A10CBBEA-B0A1-48D4-8EC4-4EFFBF4F01C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A10CBBEA-B0A1-48D4-8EC4-4EFFBF4F01C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A10CBBEA-B0A1-48D4-8EC4-4EFFBF4F01C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A10CBBEA-B0A1-48D4-8EC4-4EFFBF4F01C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9578D18E-95CD-4053-A909-AF9FEA8D3F9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9578D18E-95CD-4053-A909-AF9FEA8D3F9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9578D18E-95CD-4053-A909-AF9FEA8D3F9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9578D18E-95CD-4053-A909-AF9FEA8D3F9E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{11134D0D-CF2B-4093-8311-E7D3876B326E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{11134D0D-CF2B-4093-8311-E7D3876B326E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11134D0D-CF2B-4093-8311-E7D3876B326E}.Release|Any CPU.ActiveCfg = Release|Any CPU
