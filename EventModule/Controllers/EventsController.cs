@@ -129,7 +129,7 @@ public class EventsController : BaseController
     
     [HttpGet("{id:guid}/buy-ticket")]
     // todo: make this accept a json body or params to include "how many tickets are being bought"
-    public async Task<IActionResult> BuyTickets(Guid id)
+    public async Task<IActionResult> BuyTickets(Guid id, TicketPurchaseRequest request)
     {
         var ticketPurchaseResult = await _eventService.BuyTicket(id.ToString());
         
