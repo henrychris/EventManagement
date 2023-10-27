@@ -4,7 +4,8 @@ using EventModule.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Shared.EventModels.Requests;
+using Shared.EventModels.Responses;
 using Shared.Responses;
 using Shared.UserModels.Requests;
 using Shared.UserModels.Responses;
@@ -24,13 +25,30 @@ public class IntegrationTest
             {
                 builder.ConfigureServices(services =>
                 {
-                    services.RemoveAll(typeof(EventDbContext));
-                    services.RemoveAll(typeof(UserDbContext));
+                    // remove dataContext 
+                    var descriptorsToRemove = services.Where(
+                        d => d.ServiceType == typeof(DbContextOptions<EventDbContext>)
+                             || d.ServiceType == typeof(DbContextOptions<UserDbContext>)).ToList();
+
+                    foreach (var descriptor in descriptorsToRemove)
+                    {
+                        services.Remove(descriptor);
+                    }
+
+                    // replace dataContext with in-memory versions
                     services.AddDbContext<EventDbContext>(options => { options.UseInMemoryDatabase("TestEventDB"); });
                     services.AddDbContext<UserDbContext>(options => { options.UseInMemoryDatabase("TestUserDB"); });
                 });
             });
         TestClient = webApplicationFactory.CreateClient();
+    }
+
+    protected async Task<EventResponse> CreateEventAsync(CreateEventRequest request)
+    {
+        var eventResponse = await TestClient.PostAsJsonAsync("/Events", request);
+
+        var result = await eventResponse.Content.ReadFromJsonAsync<ApiResponse<EventResponse>>();
+        return result?.Data ?? throw new InvalidOperationException("Event Creation failed.");
     }
 
     protected async Task AuthenticateAsync()
@@ -41,13 +59,8 @@ public class IntegrationTest
 
     private async Task<string> GetJwtAsync()
     {
-        // the in-memory database wasn't reset after the tests ran.
-        // use login for now, till we switch to SQlServer DBs
-
-        // var registerResponse = await TestClient.PostAsJsonAsync("/Auth/Register",
-        //     new RegisterRequest("test", "user", "test1@example.com", "Password12@", "User"));
-        var registerResponse = await TestClient.PostAsJsonAsync("/Auth/Login",
-            new LoginRequest("test1@example.com", "Password12@"));
+        var registerResponse = await TestClient.PostAsJsonAsync("/Auth/Register",
+            new RegisterRequest("test", "user", "test1@example.com", "Password12@", "User"));
 
         var result = await registerResponse.Content.ReadFromJsonAsync<ApiResponse<UserAuthResponse>>();
         return result?.Data?.AccessToken ?? throw new InvalidOperationException("Registration failed.");
