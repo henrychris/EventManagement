@@ -1,8 +1,11 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using EventModule.Data;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.EventModels.Requests;
 using Shared.EventModels.Responses;
@@ -49,6 +52,11 @@ public class IntegrationTest
 
         var result = await eventResponse.Content.ReadFromJsonAsync<ApiResponse<EventResponse>>();
         return result?.Data ?? throw new InvalidOperationException("Event Creation failed.");
+    }
+
+    protected async Task BuyTicket(string eventId)
+    {
+        await TestClient.PostAsJsonAsync($"Events/{eventId}/buy-ticket", new TicketPurchaseRequest());
     }
 
     protected async Task AuthenticateAsync()
