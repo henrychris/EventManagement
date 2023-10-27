@@ -8,4 +8,5 @@ public record EventResponse(string Guid,
     decimal Price,
     DateTime Date,
     DateTime StartTime,
-    DateTime EndTime, EventStatus EventStatus);
+    DateTime EndTime, EventStatus EventStatus,
+    int TicketsSold, int TicketsAvailable);
