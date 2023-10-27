@@ -42,7 +42,7 @@ public static class EventServiceExtensions
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
         services.AddDbContext<EventDbContext>(options =>
-            options.UseSqlite(config["ConnectionStrings:EventConnection"]));
+            options.UseSqlServer(config["ConnectionStrings:EventConnection"]));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }

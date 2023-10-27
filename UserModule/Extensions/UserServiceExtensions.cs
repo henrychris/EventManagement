@@ -45,7 +45,7 @@ public static class UserServiceExtensions
             .Build();
 
         services.AddDbContext<UserDbContext>(options =>
-            options.UseSqlite(config["ConnectionStrings:UserConnection"]));
+            options.UseSqlServer(config["ConnectionStrings:UserConnection"]));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
