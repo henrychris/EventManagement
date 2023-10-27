@@ -9,7 +9,8 @@ public static class EventModule
         services.AddCore();
     }
 
-    public static void UseEventModule(this IApplicationBuilder app)
+    public static void UseEventModule(this WebApplication app)
     {
+        app.SeedDatabase().Wait();
     }
 }

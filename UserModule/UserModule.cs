@@ -9,7 +9,7 @@ public static class UserModule
         services.AddCore();
     }
 
-    public static void UseUserModule(this IApplicationBuilder app)
+    public static void UseUserModule(this WebApplication app)
     {
         app.SeedDatabase().Wait();
     }

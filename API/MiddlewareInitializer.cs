@@ -49,7 +49,7 @@ public static class MiddlewareInitializer
     /// Registers modules for the web application.
     /// </summary>
     /// <param name="app">The web application.</param>
-    private static void RegisterModules(IApplicationBuilder app)
+    private static void RegisterModules(WebApplication app)
     {
         app.UseEventModule();
         app.UseUserModule();

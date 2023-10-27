@@ -7,19 +7,25 @@ namespace UserModule.Extensions;
 
 public static class UserAppExtensions
 {
-    public static async Task SeedDatabase(this IApplicationBuilder app)
+    public static async Task SeedDatabase(this WebApplication app)
     {
-        Console.WriteLine("Starting database seeding.");
+        if (app.Environment.IsDevelopment())
+        {
+            Console.WriteLine("Starting UserModule database seeding.");
+            using var scope = app.Services.CreateScope();
 
-        using var scope = app.ApplicationServices.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var context = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureCreatedAsync();
 
-        await SeedRoles(roleManager);
-        await SeedUsers(userManager);
-        await context.SaveChangesAsync();
-        Console.WriteLine("Database seeding complete.");
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            await SeedRoles(roleManager);
+            await SeedUsers(userManager);
+            await context.SaveChangesAsync();
+            Console.WriteLine("UserModule database seeding complete.");
+        }
     }
 
     private static async Task SeedRoles(RoleManager<IdentityRole> roleManager)
@@ -34,7 +40,7 @@ public static class UserAppExtensions
             }
         }
 
-        Console.WriteLine("Role seeding complete.");
+        Console.WriteLine("UserModule: role seeding complete.");
     }
 
     private static async Task SeedUsers(UserManager<ApplicationUser> userManager)
@@ -70,7 +76,7 @@ public static class UserAppExtensions
 
         await AddUser(userManager, adminUser, UserRoles.Admin.ToString());
         await AddUser(userManager, normalUser, UserRoles.User.ToString());
-        Console.WriteLine("User seeding complete.");
+        Console.WriteLine("UserModule: User seeding complete.");
     }
 
     private static async Task AddUser(UserManager<ApplicationUser> userManager,
@@ -86,7 +92,7 @@ public static class UserAppExtensions
             var password = new PasswordHasher<ApplicationUser>();
             var hashed = password.HashPassword(user, "secretPassword12@");
             user.PasswordHash = hashed;
-
+            user.Role = role;
             await userManager.CreateAsync(user);
             await userManager.AddToRoleAsync(user, role);
         }
