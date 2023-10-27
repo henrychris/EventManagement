@@ -9,6 +9,8 @@ public class Event
     
     public const int MinDescriptionLength = 3;
     public const int MaxDescriptionLength = 100;
+
+    public const int MaxEventAttendance = 100000;
     
     // Properties
     public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -21,4 +23,7 @@ public class Event
 
     public DateTime EndTime { get; set; }
     public EventStatus EventStatus { get; set; } = EventStatus.Upcoming;
+
+    public int TicketsAvailable { get; set; } = 1;
+    public int TicketsSold { get; set; }
 }
