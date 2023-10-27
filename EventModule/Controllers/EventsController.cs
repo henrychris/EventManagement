@@ -2,6 +2,7 @@
 using EventModule.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using Shared.API;
 using Shared.Enums;
 using Shared.EventModels.Requests;
@@ -68,6 +69,7 @@ public class EventsController : BaseController
     /// - If there's an error in the update process, it returns an appropriate error response.
     /// </returns>
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = UserRoleStrings.AdminAndUserRoles)]
     public async Task<IActionResult> UpdateEvent(Guid id, [Required] UpdateEventRequest model)
     {
         var updateEventResult = await _eventService.UpdateEvent(id.ToString(), model);
@@ -83,9 +85,43 @@ public class EventsController : BaseController
     /// - If there's an error in the deletion process, it returns an appropriate error response.
     /// </returns>
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = UserRoleStrings.Admin)]
     public async Task<IActionResult> DeleteEvent(Guid id)
     {
         var deleteEventResult = await _eventService.DeleteEvent(id.ToString());
         return deleteEventResult.Match(_ => NoContent(), ReturnErrorResponse);
+    }
+
+    /// <summary>
+    /// Searches for events based on the provided search criteria.
+    /// </summary>
+    /// <param name="request">The search criteria.</param>
+    /// <returns>A list of events that match the search criteria.</returns>
+    /// <remarks>Returns an empty list if no events match the criteria</remarks>
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchEvents([FromQuery] SearchEventRequest request)
+    {
+        var searchEventResult = await _eventService.SearchEvents(request);
+        return searchEventResult.Match(
+            _ => Ok(searchEventResult.ToSuccessfulApiResponse()),
+            ReturnErrorResponse);
+    }
+
+
+    /// <summary>
+    /// Gets events with available tickets.
+    /// </summary>
+    /// <param name="pageNumber">The page number.</param>
+    /// <param name="pageSize">The page size.</param>
+    /// <returns>A list of events that match the criteria.</returns>
+    /// <remarks>Returns an empty list if no events match the criteria</remarks>
+    [HttpGet("available-tickets")]
+    public async Task<IActionResult> GetEventsWithAvailableTickets(int pageNumber = SearchConstants.PageNumber,
+        int pageSize = SearchConstants.PageSize)
+    {
+        var searchEventResult = await _eventService.GetEventsWithAvailableTickets(pageNumber, pageSize);
+        return searchEventResult.Match(
+            _ => Ok(searchEventResult.ToSuccessfulApiResponse()),
+            ReturnErrorResponse);
     }
 }

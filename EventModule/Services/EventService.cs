@@ -148,4 +148,18 @@ public class EventService : IEventService
         await _unitOfWork.CompleteAsync();
         return Result.Deleted;
     }
+
+    public async Task<ErrorOr<SearchEventResponse>> SearchEvents(SearchEventRequest request)
+    {
+        var result = await _unitOfWork.Events.SearchEvents(request);
+        var eventData = result.Select(x => _mapper.Map<EventResponse>(x)).ToList();
+        return new SearchEventResponse(eventData, eventData.Count);
+    }
+
+    public async Task<ErrorOr<SearchEventResponse>> GetEventsWithAvailableTickets(int pageNumber, int pageSize)
+    {
+        var result = await _unitOfWork.Events.GetEventsWithAvailableTickets(pageNumber, pageSize);
+        var eventData = result.Select(x => _mapper.Map<EventResponse>(x)).ToList();
+        return new SearchEventResponse(eventData, eventData.Count);
+    }
 }
