@@ -18,13 +18,15 @@ public class EventService : IEventService
     private readonly IMapper _mapper;
     private readonly IValidator<CreateEventRequest> _validator;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<EventService> _logger;
 
     public EventService(IMapper mapper, IValidator<CreateEventRequest> validator,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, ILogger<EventService> logger)
     {
         _mapper = mapper;
         _validator = validator;
         _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     public async Task<ErrorOr<EventResponse>> CreateEvent(CreateEventRequest request)
@@ -184,6 +186,7 @@ public class EventService : IEventService
         eventObj.TicketsAvailable--;
         if (eventObj.TicketsAvailable < 0)
         {
+            _logger.LogError($"Event {eventObj.Id} would have negative tickets available.");
             throw new InvalidOperationException("Event has negative tickets available.");
         }
 
@@ -192,8 +195,9 @@ public class EventService : IEventService
             _unitOfWork.Events.Update(eventObj);
             await _unitOfWork.CompleteAsync();
         }
-        catch (DbUpdateConcurrencyException)
+        catch (DbUpdateConcurrencyException ex)
         {
+            _logger.LogError(ex, Errors.Event.ConcurrencyConflict.Description);
             return Errors.Event.ConcurrencyConflict;
         }
 
