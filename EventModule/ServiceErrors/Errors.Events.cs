@@ -44,6 +44,12 @@ public static class Errors
             code: "Event.InvalidTicketPrice",
             description: "The ticket price must be greater than, or equal to zero.");
 
-        // todo: add invalid capacity error
+        public static Error InvalidCapacity => Error.Validation(
+            code: "Event.InvalidCapacity",
+            description: "The event must have at least one attendee.");
+        
+        public static Error ExceedsMaximumCapacity => Error.Validation(
+            code: "Event.ExceedsMaximumCapacity",
+            description: $"The event must can't have more than {Data.Models.Event.MaxEventAttendance} attendees.");
     }
 }

@@ -33,9 +33,9 @@ public class EventServiceTests
     public async Task CreateEvent_ValidRequest_ReturnsEventResponse()
     {
         // Arrange
-        var request = new CreateEventRequest("Test Event", "This is a test event", 10.99m,
-            DateTime.UtcNow.AddDays(7), DateTime.UtcNow.AddDays(7).AddHours(1),
-            DateTime.UtcNow.AddDays(7).AddHours(3));
+        var request = new CreateEventRequest(Name: "Test Event", Description: "This is a test event",
+            Date: DateTime.UtcNow.AddDays(7), StartTime: DateTime.UtcNow.AddDays(7).AddHours(1),
+            EndTime: DateTime.UtcNow.AddDays(7).AddHours(3), Price: 10.99m);
 
         _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateEventRequest>(), default))
             .ReturnsAsync(new ValidationResult());
@@ -62,9 +62,9 @@ public class EventServiceTests
     public async Task CreateEvent_InvalidRequest_ReturnsErrorList()
     {
         // Arrange
-        var request = new CreateEventRequest("Tes", "This is a test event", 10.99m,
-            DateTime.UtcNow.AddDays(7), DateTime.UtcNow.AddDays(7).AddHours(1),
-            DateTime.UtcNow.AddDays(7).AddHours(3));
+        var request = new CreateEventRequest(Name: "Tes", Description: "This is a test event", Price: 10.99m,
+            Date: DateTime.UtcNow.AddDays(7), StartTime: DateTime.UtcNow.AddDays(7).AddHours(1),
+            EndTime: DateTime.UtcNow.AddDays(7).AddHours(3));
 
         var validationResult = new ValidationResult(new List<ValidationFailure>
         {

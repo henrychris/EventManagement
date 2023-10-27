@@ -26,10 +26,10 @@ public class EventControllerTests : IntegrationTest
         await AuthenticateAsync();
 
         // Act
-        var createdEvent = await CreateEventAsync(new CreateEventRequest("Test Event",
-            "This is a test event", 10.99m,
-            DateTime.UtcNow.AddDays(7), DateTime.UtcNow.AddDays(7).AddHours(1),
-            DateTime.UtcNow.AddDays(7).AddHours(3)));
+        var createdEvent = await CreateEventAsync(new CreateEventRequest(Name: "Test Event",
+            Description: "This is a test event", Price: 10.99m,
+            Date: DateTime.UtcNow.AddDays(7), StartTime: DateTime.UtcNow.AddDays(7).AddHours(1),
+            EndTime: DateTime.UtcNow.AddDays(7).AddHours(3)));
 
         var response = await TestClient.GetAsync($"/Events/{createdEvent.Guid}");
 

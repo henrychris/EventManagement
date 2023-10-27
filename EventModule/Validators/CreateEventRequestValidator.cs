@@ -52,5 +52,15 @@ public class CreateEventRequestValidator : AbstractValidator<CreateEventRequest>
             .GreaterThanOrEqualTo(0)
             .WithErrorCode(Errors.Event.InvalidTicketPrice.Code)
             .WithMessage(Errors.Event.InvalidTicketPrice.Description);
+        
+        RuleFor(request => request.TicketsAvailable)
+            .GreaterThanOrEqualTo(1)
+            .WithErrorCode(Errors.Event.InvalidCapacity.Code)
+            .WithMessage(Errors.Event.InvalidCapacity.Description);
+        
+        RuleFor(request => request.TicketsAvailable)
+            .LessThanOrEqualTo(Event.MaxEventAttendance)
+            .WithErrorCode(Errors.Event.ExceedsMaximumCapacity.Code)
+            .WithMessage(Errors.Event.ExceedsMaximumCapacity.Description);
     }
 }

@@ -1,4 +1,5 @@
-﻿using EventModule.Validators;
+﻿using EventModule.Data.Models;
+using EventModule.Validators;
 using Shared.EventModels.Requests;
 using FluentValidation.TestHelper;
 
@@ -150,10 +151,32 @@ public class CreateEventRequestValidatorTests
     {
         var request = new CreateEventRequest(Name: "Test Name", Description: "Test Description",
             Date: DateTime.UtcNow.AddDays(1), StartTime: DateTime.UtcNow.AddDays(1).AddHours(1),
-            EndTime: DateTime.UtcNow.AddDays(1).AddHours(2), Price: 10);
+            EndTime: DateTime.UtcNow.AddDays(1).AddHours(2), Price: 10, TicketsAvailable: 30);
 
         var result = _validator.TestValidate(request);
 
         result.ShouldNotHaveAnyValidationErrors();
+    }
+
+    [Test]
+    public void Should_Have_Error_When_TicketsAvailable_IsNegative()
+    {
+        var request = new CreateEventRequest(Name: "Test Name", Description: "Test Description",
+            Date: DateTime.UtcNow.AddDays(1), StartTime: DateTime.UtcNow.AddDays(1).AddHours(1),
+            EndTime: DateTime.UtcNow.AddDays(1).AddHours(2), Price: 10, TicketsAvailable: -1);
+        
+        var result = _validator.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(x => x.TicketsAvailable);
+    }
+    
+    [Test]
+    public void Should_Have_Error_When_TicketsAvailable_ExceedCapacity()
+    {
+        var request = new CreateEventRequest(Name: "Test Name", Description: "Test Description",
+            Date: DateTime.UtcNow.AddDays(1), StartTime: DateTime.UtcNow.AddDays(1).AddHours(1),
+            EndTime: DateTime.UtcNow.AddDays(1).AddHours(2), Price: 10, TicketsAvailable: Event.MaxEventAttendance + 100);
+        
+        var result = _validator.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(x => x.TicketsAvailable);
     }
 }
