@@ -10,7 +10,7 @@ public static class MiddlewareInitializer
     /// Configures middleware for the web application.
     /// </summary>
     /// <param name="app">The web application.</param>
-    public static void ConfigureMiddleware(this WebApplication app)
+    public static void ConfigureApplication(this WebApplication app)
     {
         RegisterSwagger(app);
         RegisterMiddleware(app);
