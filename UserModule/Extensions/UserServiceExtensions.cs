@@ -18,8 +18,8 @@ public static class UserServiceExtensions
     /// <param name="services">The IServiceCollection to add the services to.</param>
     internal static void AddCore(this IServiceCollection services)
     {
-        AddDatabase(services);
         AddMSIdentity(services);
+        AddDatabase(services);
         RegisterCustomDependencies(services);
         services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>(ServiceLifetime.Transient);
     }
@@ -46,7 +46,6 @@ public static class UserServiceExtensions
 
         services.AddDbContext<UserDbContext>(options =>
             options.UseSqlite(config["ConnectionStrings:UserConnection"]));
-
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 

@@ -11,5 +11,6 @@ public static class UserModule
 
     public static void UseUserModule(this IApplicationBuilder app)
     {
+        app.SeedDatabase().Wait();
     }
 }
