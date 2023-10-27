@@ -127,7 +127,7 @@ public class EventsController : BaseController
             ReturnErrorResponse);
     }
     
-    [HttpGet("{id:guid}/buy-ticket")]
+    [HttpPost("{id:guid}/buy-ticket")]
     // todo: make this accept a json body or params to include "how many tickets are being bought"
     public async Task<IActionResult> BuyTickets(Guid id, TicketPurchaseRequest request)
     {
