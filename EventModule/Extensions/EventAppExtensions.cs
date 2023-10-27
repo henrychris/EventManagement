@@ -16,7 +16,7 @@ public static class EventAppExtensions
 
             var context = scope.ServiceProvider.GetRequiredService<EventDbContext>();
             await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
+            await context.Database.MigrateAsync();
 
             if (!await context.Events.AnyAsync(x => x.Name == "Henry's Main Event!"))
             {
