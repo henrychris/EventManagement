@@ -7,6 +7,7 @@ using EventModule.Services;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shared.Enums;
 using Shared.EventModels.Requests;
@@ -19,6 +20,7 @@ public class EventServiceTests
     private readonly IMapper _mapper;
     private readonly Mock<IValidator<CreateEventRequest>> _validator;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+    private readonly Mock<ILogger<EventService>> loggerMock;
     private readonly EventService _eventService;
 
     public EventServiceTests()
@@ -26,7 +28,8 @@ public class EventServiceTests
         _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EventMappingProfile())).CreateMapper();
         _validator = new Mock<IValidator<CreateEventRequest>>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _eventService = new EventService(_mapper, _validator.Object, _unitOfWorkMock.Object);
+        loggerMock = new Mock<ILogger<EventService>>();
+        _eventService = new EventService(_mapper, _validator.Object, _unitOfWorkMock.Object, loggerMock.Object);
     }
 
     [Test]
@@ -35,7 +38,7 @@ public class EventServiceTests
         // Arrange
         var request = new CreateEventRequest(Name: "Test Event", Description: "This is a test event",
             Date: DateTime.UtcNow.AddDays(7), StartTime: DateTime.UtcNow.AddDays(7).AddHours(1),
-            EndTime: DateTime.UtcNow.AddDays(7).AddHours(3), Price: 10.99m);
+            EndTime: DateTime.UtcNow.AddDays(7).AddHours(3), Price: 10.99m, TicketsAvailable: 20);
 
         _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateEventRequest>(), default))
             .ReturnsAsync(new ValidationResult());
@@ -56,6 +59,8 @@ public class EventServiceTests
         result.Value.StartTime.Should().Be(request.StartTime);
         result.Value.EndTime.Should().Be(request.EndTime);
         result.Value.EventStatus.Should().Be(EventStatus.Upcoming);
+        result.Value.TicketsAvailable.Should().Be(request.TicketsAvailable);
+        result.Value.TicketsSold.Should().Be(0);
     }
 
     [Test]
