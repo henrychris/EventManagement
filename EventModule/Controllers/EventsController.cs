@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ErrorOr;
 using EventModule.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Shared;
 using Shared.API;
 using Shared.Enums;
 using Shared.EventModels.Requests;
+using Shared.EventModels.Responses;
 using Shared.Extensions;
 
 namespace EventModule.Controllers;
@@ -122,6 +124,17 @@ public class EventsController : BaseController
         var searchEventResult = await _eventService.GetEventsWithAvailableTickets(pageNumber, pageSize);
         return searchEventResult.Match(
             _ => Ok(searchEventResult.ToSuccessfulApiResponse()),
+            ReturnErrorResponse);
+    }
+    
+    [HttpGet("{id:guid}/buy-ticket")]
+    // todo: make this accept a json body or params to include "how many tickets are being bought"
+    public async Task<IActionResult> BuyTickets(Guid id)
+    {
+        var ticketPurchaseResult = await _eventService.BuyTicket(id.ToString());
+        
+        return ticketPurchaseResult.Match(
+            _ => Ok(ticketPurchaseResult.ToSuccessfulApiResponse()),
             ReturnErrorResponse);
     }
 }

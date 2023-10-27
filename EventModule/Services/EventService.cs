@@ -6,6 +6,7 @@ using ErrorOr;
 using EventModule.Repositories;
 using EventModule.ServiceErrors;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Shared.EventModels.Requests;
 using Shared.EventModels.Responses;
 using Shared.Extensions;
@@ -149,6 +150,9 @@ public class EventService : IEventService
         return Result.Deleted;
     }
 
+    // todo: add integration tests
+    // add CreateRangeMethod to create a list of events
+    // test all possible situations
     public async Task<ErrorOr<SearchEventResponse>> SearchEvents(SearchEventRequest request)
     {
         var result = await _unitOfWork.Events.SearchEvents(request);
@@ -156,10 +160,43 @@ public class EventService : IEventService
         return new SearchEventResponse(eventData, eventData.Count);
     }
 
+    // todo: just one test. given a list of events that have tickets and don't, only get the ones with tickets.
     public async Task<ErrorOr<SearchEventResponse>> GetEventsWithAvailableTickets(int pageNumber, int pageSize)
     {
         var result = await _unitOfWork.Events.GetEventsWithAvailableTickets(pageNumber, pageSize);
         var eventData = result.Select(x => _mapper.Map<EventResponse>(x)).ToList();
         return new SearchEventResponse(eventData, eventData.Count);
+    }
+
+    public async Task<ErrorOr<TicketPurchaseResponse>> BuyTicket(string id)
+    {
+        var eventObj = await _unitOfWork.Events.GetByIdAsync(id);
+        if (eventObj is null)
+        {
+            return Errors.Event.NotFound;
+        }
+
+        if (eventObj.TicketsAvailable == 0)
+        {
+            return Errors.Event.NoTicketsAvailable;
+        }
+
+        eventObj.TicketsAvailable--;
+        if (eventObj.TicketsAvailable < 0)
+        {
+            throw new InvalidOperationException("Event has negative tickets available.");
+        }
+
+        try
+        {
+            _unitOfWork.Events.Update(eventObj);
+            await _unitOfWork.CompleteAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return Errors.Event.ConcurrencyConflict;
+        }
+
+        return new TicketPurchaseResponse(eventObj.Name);
     }
 }

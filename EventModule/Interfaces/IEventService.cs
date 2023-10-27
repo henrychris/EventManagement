@@ -13,4 +13,5 @@ public interface IEventService
     Task<ErrorOr<SearchEventResponse>> SearchEvents(SearchEventRequest request);
     Task<ErrorOr<SearchEventResponse>> GetEventsWithAvailableTickets(int pageNumber, int pageSize);
 
+    Task<ErrorOr<TicketPurchaseResponse>> BuyTicket(string id);
 }
