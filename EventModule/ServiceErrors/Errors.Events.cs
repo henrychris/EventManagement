@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using Shared.EventModels.Responses;
 
 namespace EventModule.ServiceErrors;
 
@@ -47,9 +48,17 @@ public static class Errors
         public static Error InvalidCapacity => Error.Validation(
             code: "Event.InvalidCapacity",
             description: "The event must have at least one attendee.");
-        
+
         public static Error ExceedsMaximumCapacity => Error.Validation(
             code: "Event.ExceedsMaximumCapacity",
             description: $"The event must can't have more than {Data.Models.Event.MaxEventAttendance} attendees.");
+
+        public static Error NoTicketsAvailable => Error.Failure(
+            code: "Event.NoTicketsAvailable",
+            description: $"Sorry, there aren't any tickets available!");
+
+        public static Error ConcurrencyConflict => Error.Failure(
+            code: "Event.ConcurrencyConflict",
+            description: $"Sorry, this ticket has been purchased already!");
     }
 }
