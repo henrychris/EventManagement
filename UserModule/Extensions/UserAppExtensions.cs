@@ -46,10 +46,7 @@ public static class UserAppExtensions
 
         foreach (var role in roles)
         {
-            if (!await roleManager.RoleExistsAsync(role))
-            {
-                await roleManager.CreateAsync(new IdentityRole(role));
-            }
+            await roleManager.CreateAsync(new IdentityRole(role));
         }
 
         Console.WriteLine("UserModule: role seeding complete.");
@@ -91,14 +88,11 @@ public static class UserAppExtensions
             throw new ArgumentNullException(nameof(user));
         }
 
-        if (await userManager.FindByEmailAsync(user.Email!) is null)
-        {
-            var passwordHasher = new PasswordHasher<ApplicationUser>();
-            var hashedPassword = passwordHasher.HashPassword(user, password);
-            user.PasswordHash = hashedPassword;
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
+        var hashedPassword = passwordHasher.HashPassword(user, password);
+        user.PasswordHash = hashedPassword;
 
-            await userManager.CreateAsync(user);
-            await userManager.AddToRoleAsync(user, user.Role);
-        }
+        await userManager.CreateAsync(user);
+        await userManager.AddToRoleAsync(user, user.Role);
     }
 }
