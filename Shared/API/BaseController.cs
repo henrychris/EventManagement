@@ -9,7 +9,7 @@ namespace Shared.API;
 [Authorize]
 [ApiController]
 [TypeFilter(typeof(CustomValidationFilter))]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public abstract class BaseController : ControllerBase
 {
     /// <summary>

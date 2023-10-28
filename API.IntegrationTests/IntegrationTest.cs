@@ -1,11 +1,8 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using EventModule.Data;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.EventModels.Requests;
 using Shared.EventModels.Responses;
@@ -43,12 +40,15 @@ public class IntegrationTest
                     services.AddDbContext<UserDbContext>(options => { options.UseInMemoryDatabase("TestUserDB"); });
                 });
             });
-        TestClient = webApplicationFactory.CreateClient();
+        TestClient = webApplicationFactory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri("http://localhost/api/")
+        });
     }
 
     protected async Task<EventResponse> CreateEventAsync(CreateEventRequest request)
     {
-        var eventResponse = await TestClient.PostAsJsonAsync("/Events", request);
+        var eventResponse = await TestClient.PostAsJsonAsync("Events", request);
 
         var result = await eventResponse.Content.ReadFromJsonAsync<ApiResponse<EventResponse>>();
         return result?.Data ?? throw new InvalidOperationException("Event Creation failed.");
@@ -67,7 +67,7 @@ public class IntegrationTest
 
     private async Task<string> GetJwtAsync()
     {
-        var registerResponse = await TestClient.PostAsJsonAsync("/Auth/Register",
+        var registerResponse = await TestClient.PostAsJsonAsync("Auth/Register",
             new RegisterRequest("test", "user", "test1@example.com", "Password12@", "User"));
 
         var result = await registerResponse.Content.ReadFromJsonAsync<ApiResponse<UserAuthResponse>>();

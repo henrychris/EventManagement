@@ -14,7 +14,7 @@ public class EventControllerTests : IntegrationTest
     public async Task GetEvent_ShouldReturnUnauthorized_WhenAccessTokenIsMissing()
     {
         const string id = "cecb7257-6764-4a5c-a9f8-6412d158214a";
-        var response = await TestClient.GetAsync($"/Events/{id}");
+        var response = await TestClient.GetAsync($"Events/{id}");
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -31,7 +31,7 @@ public class EventControllerTests : IntegrationTest
             Date: DateTime.UtcNow.AddDays(7), StartTime: DateTime.UtcNow.AddDays(7).AddHours(1),
             EndTime: DateTime.UtcNow.AddDays(7).AddHours(3)));
 
-        var response = await TestClient.GetAsync($"/Events/{createdEvent.Guid}");
+        var response = await TestClient.GetAsync($"Events/{createdEvent.Guid}");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -62,7 +62,7 @@ public class EventControllerTests : IntegrationTest
 
         // Act
         await BuyTicket(createdEvent2.Guid);
-        var response = await TestClient.GetAsync("/Events/available-tickets");
+        var response = await TestClient.GetAsync("Events/available-tickets");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
