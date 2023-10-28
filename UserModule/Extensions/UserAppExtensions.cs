@@ -31,6 +31,7 @@ public static class UserAppExtensions
             await SeedUsers(userManager);
         }
 
+        await context.SaveChangesAsync();
         Console.WriteLine("UserModule: database seeding complete.");
     }
 
