@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Shared.Enums;
 using Shared.EventModels.Requests;
-using Shared.EventModels.Responses;
 
 namespace EventModule.Tests.Services;
 

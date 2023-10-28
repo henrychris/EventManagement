@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ErrorOr;
 using EventModule.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using Shared;
 using Shared.API;
 using Shared.Enums;
 using Shared.EventModels.Requests;
-using Shared.EventModels.Responses;
 using Shared.Extensions;
 
 namespace EventModule.Controllers;

@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using Shared.EventModels.Responses;
 
 namespace EventModule.ServiceErrors;
 
