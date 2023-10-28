@@ -26,6 +26,7 @@ public static class EventAppExtensions
             await MigrateAndSeedDevelopmentDatabase(context);
         }
 
+        await context.SaveChangesAsync();
         Console.WriteLine("EventModule: database seeding complete.");
     }
 
@@ -33,11 +34,11 @@ public static class EventAppExtensions
     {
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-        await SeedEvents(context);
     }
 
     private static async Task MigrateAndSeedDevelopmentDatabase(EventDbContext context)
     {
+        await context.Database.EnsureDeletedAsync();
         await context.Database.MigrateAsync();
         await SeedEvents(context);
     }
@@ -57,8 +58,24 @@ public static class EventAppExtensions
                 StartTime = DateTime.Now.AddDays(1).AddHours(1).Date,
                 EndTime = DateTime.Now.AddDays(1).AddHours(6).Date
             });
-            
+
             Console.WriteLine($"EventModule: Added default event: {DefaultEventName}");
+        }
+
+        if (!await context.Events.AnyAsync(x => x.Name == "Summer Music Concert"))
+        {
+            var date = new DateTime(2023, 7, 29);
+            await context.Events.AddAsync(new Event
+            {
+                Id = "61c904c7-fdb2-4f56-859e-e6a5151af515",
+                Name = "Summer Music Concert",
+                Description = "An event that exists by default.",
+                Price = 200.00m,
+                EventStatus = EventStatus.Canceled,
+                Date = date,
+                StartTime = date.AddHours(1).Date,
+                EndTime = date.AddHours(6).Date
+            });
         }
     }
 
