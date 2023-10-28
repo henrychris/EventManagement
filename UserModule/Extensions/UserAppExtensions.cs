@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Shared.Enums;
 using UserModule.Data;
@@ -11,6 +12,19 @@ public static class UserAppExtensions
     private const string InMemoryProviderName = "Microsoft.EntityFrameworkCore.InMemory";
 
     public static async Task SeedDatabase(this WebApplication app)
+    {
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+        Console.WriteLine("UserModule: database seeding starting.");
+        await SeedDatabaseInternal(app);
+
+        stopwatch.Stop();
+        var elapsedTime = stopwatch.Elapsed;
+        Console.WriteLine($"UserModule: database seeding completed in {elapsedTime.TotalMilliseconds}ms.");
+    }
+
+    private static async Task SeedDatabaseInternal(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<UserDbContext>();
@@ -32,7 +46,6 @@ public static class UserAppExtensions
         }
 
         await context.SaveChangesAsync();
-        Console.WriteLine("UserModule: database seeding complete.");
     }
 
     private static bool IsInMemoryDatabase(DbContext context)

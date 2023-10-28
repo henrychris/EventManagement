@@ -1,4 +1,5 @@
-﻿using EventModule.Data;
+﻿using System.Diagnostics;
+using EventModule.Data;
 using EventModule.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Shared.Enums;
@@ -13,10 +14,22 @@ public static class EventAppExtensions
 
     public static async Task SeedDatabase(this WebApplication app)
     {
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+        Console.WriteLine("EventModule: database seeding starting.");
+        await SeedDatabaseInternal(app);
+
+        stopwatch.Stop();
+        var elapsedTime = stopwatch.Elapsed;
+        Console.WriteLine($"EventModule: database seeding completed in {elapsedTime.TotalMilliseconds}ms.");
+    }
+
+    private static async Task SeedDatabaseInternal(WebApplication app)
+    {
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventDbContext>();
 
-        Console.WriteLine("EventModule: database seeding starting.");
         if (IsInMemoryDatabase(context))
         {
             await SeedInMemoryDatabase(context);
@@ -27,7 +40,6 @@ public static class EventAppExtensions
         }
 
         await context.SaveChangesAsync();
-        Console.WriteLine("EventModule: database seeding complete.");
     }
 
     private static async Task SeedInMemoryDatabase(EventDbContext context)
