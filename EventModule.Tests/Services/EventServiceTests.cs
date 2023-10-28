@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Shared.Enums;
 using Shared.EventModels.Requests;
+using Shared.EventModels.Responses;
 
 namespace EventModule.Tests.Services;
 
@@ -197,5 +198,49 @@ public class EventServiceTests
         // Assert
         result.FirstError.Description.Should().Be(Errors.Event.NotFound.Description);
         result.FirstError.Code.Should().Be(Errors.Event.NotFound.Code);
+    }
+
+    [Test]
+    public async Task BuyTicket_WhenEventNotFound_ReturnsError()
+    {
+        // Arrange
+        const string eventId = "1";
+        _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync((Event)null);
+
+        // Act
+        var result = await _eventService.BuyTicket(eventId);
+
+        // Assert
+        result.FirstError.Should().Be(Errors.Event.NotFound);
+    }
+
+    [Test]
+    public async Task BuyTicket_WhenNoTicketsAvailable_ReturnsError()
+    {
+        // Arrange
+        const string eventId = "1";
+        var eventObj = new Event { TicketsAvailable = 0 };
+        _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(eventObj);
+
+        // Act
+        var result = await _eventService.BuyTicket(eventId);
+
+        // Assert
+        result.FirstError.Should().Be(Errors.Event.NoTicketsAvailable);
+    }
+
+    [Test]
+    public async Task BuyTicket_WhenTicketsAvailable_ReturnsTicketPurchaseResponse()
+    {
+        // Arrange
+        const string eventId = "1";
+        var eventObj = new Event { TicketsAvailable = 1, Name = "Test" };
+        _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(eventObj);
+
+        // Act
+        var result = await _eventService.BuyTicket(eventId);
+
+        // Assert
+        result.Value.EventName.Should().Be(eventObj.Name);
     }
 }
