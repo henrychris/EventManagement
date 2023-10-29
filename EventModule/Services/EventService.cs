@@ -16,28 +16,29 @@ namespace EventModule.Services;
 public class EventService : IEventService
 {
     private readonly IMapper _mapper;
-    private readonly IValidator<CreateEventRequest> _validator;
+    private readonly IValidator<Event> _eventValidator;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<EventService> _logger;
 
-    public EventService(IMapper mapper, IValidator<CreateEventRequest> validator,
+    public EventService(IMapper mapper, IValidator<Event> eventValidator,
         IUnitOfWork unitOfWork, ILogger<EventService> logger)
     {
         _mapper = mapper;
-        _validator = validator;
+        _eventValidator = eventValidator;
         _unitOfWork = unitOfWork;
         _logger = logger;
     }
 
     public async Task<ErrorOr<EventResponse>> CreateEvent(CreateEventRequest request)
     {
-        var validateEventResult = await _validator.ValidateAsync(request);
+        var newEvent = _mapper.Map<Event>(request);
+
+        var validateEventResult = await _eventValidator.ValidateAsync(newEvent);
         if (!validateEventResult.IsValid)
         {
             return validateEventResult.ToErrorList();
         }
 
-        var newEvent = _mapper.Map<Event>(request);
         await _unitOfWork.Events.AddAsync(newEvent);
         await _unitOfWork.CompleteAsync();
         return _mapper.Map<EventResponse>(newEvent);
@@ -57,65 +58,12 @@ public class EventService : IEventService
             return Errors.Event.NotFound;
         }
 
-        // todo: make all the changes, and validate the final Event object. then return errors if something is iffy.
-        var errors = new List<Error>();
-        if (!string.IsNullOrEmpty(request.Name))
-        {
-            existingEvent.Name = request.Name;
-        }
-
-        if (!string.IsNullOrEmpty(request.Description))
-        {
-            existingEvent.Description = request.Description;
-        }
-
-        if (request.Price.HasValue)
-        {
-            if (request.Price < 0)
-            {
-                errors.Add(Errors.Event.InvalidTicketPrice);
-            }
-            else
-            {
-                existingEvent.Price = request.Price.Value;
-            }
-        }
-
-        if (request.Date.HasValue)
-        {
-            if (request.Date < DateTime.UtcNow)
-            {
-                errors.Add(Errors.Event.InvalidEventDate);
-            }
-            else
-            {
-                existingEvent.Date = request.Date.Value;
-            }
-        }
-
-        if (request.StartTime.HasValue)
-        {
-            if (request.StartTime < existingEvent.Date)
-            {
-                errors.Add(Errors.Event.InvalidEventStartTime);
-            }
-            else
-            {
-                existingEvent.StartTime = request.StartTime.Value;
-            }
-        }
-
-        if (request.EndTime.HasValue)
-        {
-            if (request.EndTime < existingEvent.Date || request.EndTime < existingEvent.StartTime)
-            {
-                errors.Add(Errors.Event.InvalidEventEndTime);
-            }
-            else
-            {
-                existingEvent.EndTime = request.EndTime.Value;
-            }
-        }
+        existingEvent.Name = request.Name ?? existingEvent.Name;
+        existingEvent.Description = request.Description ?? existingEvent.Description;
+        existingEvent.Price = request.Price ?? existingEvent.Price;
+        existingEvent.Date = request.Date ?? existingEvent.Date;
+        existingEvent.StartTime = request.StartTime ?? existingEvent.StartTime;
+        existingEvent.EndTime = request.EndTime ?? existingEvent.EndTime;
 
         if (!string.IsNullOrEmpty(request.EventStatus))
         {
@@ -129,9 +77,10 @@ public class EventService : IEventService
             }
         }
 
-        if (errors.Count > 0)
+        var validationResult = await _eventValidator.ValidateAsync(existingEvent);
+        if (!validationResult.IsValid)
         {
-            return errors;
+            return validationResult.ToErrorList();
         }
 
         _unitOfWork.Events.Update(existingEvent);
