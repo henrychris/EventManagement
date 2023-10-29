@@ -1,16 +1,12 @@
 ﻿using EventModule.Data.Models;
 using EventModule.ServiceErrors;
 using FluentValidation;
-using Shared.EventModels.Requests;
 
 namespace EventModule.Validators;
 
-/// <summary>
-/// Validator for the CreateEventRequest class.
-/// </summary>
-public class CreateEventRequestValidator : AbstractValidator<CreateEventRequest>
+public class EventValidator : AbstractValidator<Event>
 {
-    public CreateEventRequestValidator()
+    public EventValidator()
     {
         RuleFor(request => request)
             .NotEmpty();
@@ -52,12 +48,12 @@ public class CreateEventRequestValidator : AbstractValidator<CreateEventRequest>
             .GreaterThanOrEqualTo(0)
             .WithErrorCode(Errors.Event.InvalidTicketPrice.Code)
             .WithMessage(Errors.Event.InvalidTicketPrice.Description);
-        
+
         RuleFor(request => request.TicketsAvailable)
             .GreaterThanOrEqualTo(1)
             .WithErrorCode(Errors.Event.InvalidCapacity.Code)
             .WithMessage(Errors.Event.InvalidCapacity.Description);
-        
+
         RuleFor(request => request.TicketsAvailable)
             .LessThanOrEqualTo(Event.MaxEventAttendance)
             .WithErrorCode(Errors.Event.ExceedsMaximumCapacity.Code)

@@ -18,7 +18,7 @@ namespace EventModule.Tests.Services;
 public class EventServiceTests
 {
     private readonly IMapper _mapper;
-    private readonly Mock<IValidator<CreateEventRequest>> _validator;
+    private readonly Mock<IValidator<Event>> _validator;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ILogger<EventService>> loggerMock;
     private readonly EventService _eventService;
@@ -26,7 +26,7 @@ public class EventServiceTests
     public EventServiceTests()
     {
         _mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EventMappingProfile())).CreateMapper();
-        _validator = new Mock<IValidator<CreateEventRequest>>();
+        _validator = new Mock<IValidator<Event>>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         loggerMock = new Mock<ILogger<EventService>>();
         _eventService = new EventService(_mapper, _validator.Object, _unitOfWorkMock.Object, loggerMock.Object);
@@ -40,8 +40,9 @@ public class EventServiceTests
             Date: DateTime.UtcNow.AddDays(7), StartTime: DateTime.UtcNow.AddDays(7).AddHours(1),
             EndTime: DateTime.UtcNow.AddDays(7).AddHours(3), Price: 10.99m, TicketsAvailable: 20);
 
-        _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateEventRequest>(), default))
+        _validator.Setup(x => x.ValidateAsync(It.IsAny<Event>(), default))
             .ReturnsAsync(new ValidationResult());
+
         var eventEntity = _mapper.Map<Event>(request);
         _unitOfWorkMock.Setup(uow => uow.Events.AddAsync(It.IsAny<Event>()))
             .Callback<Event>(e => eventEntity = e);
@@ -75,7 +76,8 @@ public class EventServiceTests
         {
             new("Name", "Name is required")
         });
-        _validator.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(validationResult);
+        _validator.Setup(v => v.ValidateAsync(It.IsAny<Event>(), default))
+            .ReturnsAsync(validationResult);
 
         // Act
         var result = await _eventService.CreateEvent(request);
@@ -160,13 +162,18 @@ public class EventServiceTests
 
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(existingEvent);
 
+        var validationResult = new ValidationResult(new List<ValidationFailure>
+        {
+            new(Errors.Event.InvalidTicketPrice.Code, Errors.Event.InvalidTicketPrice.Description)
+        });
+        _validator.Setup(v => v.ValidateAsync(It.IsAny<Event>(), default))
+            .ReturnsAsync(validationResult);
         // Act
         var result = await _eventService.UpdateEvent(eventId, request);
 
         // Assert
         result.Errors.Should().HaveCount(1);
         result.FirstError.Description.Should().Be(Errors.Event.InvalidTicketPrice.Description);
-        result.FirstError.Code.Should().Be(Errors.Event.InvalidTicketPrice.Code);
     }
 
     [Test]

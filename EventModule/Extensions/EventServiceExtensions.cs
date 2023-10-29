@@ -17,7 +17,7 @@ public static class EventServiceExtensions
     internal static void AddCore(this IServiceCollection services)
     {
         services.AddAutoMapper(typeof(EventMappingProfile));
-        services.AddValidatorsFromAssemblyContaining<CreateEventRequestValidator>(ServiceLifetime.Transient);
+        services.AddValidatorsFromAssemblyContaining<EventValidator>(ServiceLifetime.Transient);
 
         AddDatabase(services);
         RegisterCustomDependencies(services);
