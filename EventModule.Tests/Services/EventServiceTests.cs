@@ -92,7 +92,7 @@ public class EventServiceTests
     {
         // Arrange
         const string eventId = "1";
-        var eventEntity = new Event { Id = eventId, Name = "Test Event" };
+        var eventEntity = new Event { Id = eventId, Name = "Test Event", OrganiserId = new Guid().ToString() };
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(eventEntity);
 
         // Act
@@ -123,7 +123,7 @@ public class EventServiceTests
     {
         // Arrange
         const string eventId = "1";
-        var existingEvent = new Event { Id = eventId, Name = "Test Event" };
+        var existingEvent = new Event { Id = eventId, Name = "Test Event", OrganiserId = new Guid().ToString() };
         var request = new UpdateEventRequest("Updated Test Event", null, null, null, null, null, null, null);
 
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(existingEvent);
@@ -157,7 +157,7 @@ public class EventServiceTests
     {
         // Arrange
         var eventId = "1";
-        var existingEvent = new Event { Id = eventId, Name = "Test Event" };
+        var existingEvent = new Event { Id = eventId, Name = "Test Event", OrganiserId = new Guid().ToString() };
         var request = new UpdateEventRequest(null, null, -1m, null, null, null, null, null);
 
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(existingEvent);
@@ -181,7 +181,7 @@ public class EventServiceTests
     {
         // Arrange
         const string eventId = "1";
-        var existingEvent = new Event { Id = eventId };
+        var existingEvent = new Event { Id = eventId, OrganiserId = new Guid().ToString() };
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(existingEvent);
 
         // Act
@@ -225,7 +225,7 @@ public class EventServiceTests
     {
         // Arrange
         const string eventId = "1";
-        var eventObj = new Event { TicketsAvailable = 0 };
+        var eventObj = new Event { TicketsAvailable = 0, OrganiserId = new Guid().ToString() };
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(eventObj);
 
         // Act
@@ -240,7 +240,7 @@ public class EventServiceTests
     {
         // Arrange
         const string eventId = "1";
-        var eventObj = new Event { TicketsAvailable = 1, Name = "Test" };
+        var eventObj = new Event { TicketsAvailable = 1, Name = "Test", OrganiserId = new Guid().ToString() };
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(eventObj);
 
         // Act

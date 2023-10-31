@@ -25,7 +25,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -43,7 +43,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -61,7 +61,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -79,7 +79,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -97,7 +97,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -115,7 +115,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -133,7 +133,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(-1),
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -151,7 +151,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(-1),
             EndTime = DateTime.UtcNow.AddHours(2),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -169,7 +169,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(-1),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -187,7 +187,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(2),
             EndTime = DateTime.UtcNow.AddHours(1),
-            Price = 10
+            Price = 10, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -205,7 +205,7 @@ public class EventValidatorTests
             Date = DateTime.UtcNow.AddDays(1),
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
-            Price = -1
+            Price = -1, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -224,7 +224,7 @@ public class EventValidatorTests
             StartTime = DateTime.UtcNow.AddDays(1).AddHours(1),
             EndTime = DateTime.UtcNow.AddDays(1).AddHours(2),
             Price = 10,
-            TicketsAvailable = 30
+            TicketsAvailable = 30, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -243,7 +243,7 @@ public class EventValidatorTests
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
             Price = 10,
-            TicketsAvailable = -1
+            TicketsAvailable = -1, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
@@ -263,7 +263,7 @@ public class EventValidatorTests
             StartTime = DateTime.UtcNow.AddHours(1),
             EndTime = DateTime.UtcNow.AddHours(2),
             Price = 10,
-            TicketsAvailable = Event.MaxEventAttendance + 100
+            TicketsAvailable = Event.MaxEventAttendance + 100, OrganiserId = new Guid().ToString()
         };
 
         var result = _validator.TestValidate(request);
