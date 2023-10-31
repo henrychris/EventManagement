@@ -1,6 +1,7 @@
 using AutoMapper;
 using ErrorOr;
 using EventModule.Data.Models;
+using EventModule.Interfaces;
 using EventModule.Repositories;
 using EventModule.ServiceErrors;
 using EventModule.Services;
@@ -21,6 +22,7 @@ public class EventServiceTests
     private readonly Mock<IValidator<Event>> _validator;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ILogger<EventService>> loggerMock;
+    private readonly Mock<ICurrentUser> _currentUserMock;
     private readonly EventService _eventService;
 
     public EventServiceTests()
@@ -29,7 +31,9 @@ public class EventServiceTests
         _validator = new Mock<IValidator<Event>>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         loggerMock = new Mock<ILogger<EventService>>();
-        _eventService = new EventService(_mapper, _validator.Object, _unitOfWorkMock.Object, loggerMock.Object);
+        _currentUserMock = new Mock<ICurrentUser>();
+        _eventService = new EventService(_mapper, _validator.Object, _unitOfWorkMock.Object, loggerMock.Object,
+            _currentUserMock.Object);
     }
 
     [Test]
@@ -40,6 +44,7 @@ public class EventServiceTests
             Date: DateTime.UtcNow.AddDays(7), StartTime: DateTime.UtcNow.AddDays(7).AddHours(1),
             EndTime: DateTime.UtcNow.AddDays(7).AddHours(3), Price: 10.99m, TicketsAvailable: 20);
 
+        _currentUserMock.Setup(x => x.UserId).Returns(new Guid().ToString);
         _validator.Setup(x => x.ValidateAsync(It.IsAny<Event>(), default))
             .ReturnsAsync(new ValidationResult());
 
@@ -72,6 +77,7 @@ public class EventServiceTests
             Date: DateTime.UtcNow.AddDays(7), StartTime: DateTime.UtcNow.AddDays(7).AddHours(1),
             EndTime: DateTime.UtcNow.AddDays(7).AddHours(3));
 
+        _currentUserMock.Setup(x => x.UserId).Returns(new Guid().ToString);
         var validationResult = new ValidationResult(new List<ValidationFailure>
         {
             new("Name", "Name is required")

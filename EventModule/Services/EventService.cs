@@ -19,20 +19,24 @@ public class EventService : IEventService
     private readonly IValidator<Event> _eventValidator;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<EventService> _logger;
+    private readonly ICurrentUser _currentUser;
 
     public EventService(IMapper mapper, IValidator<Event> eventValidator,
-        IUnitOfWork unitOfWork, ILogger<EventService> logger)
+        IUnitOfWork unitOfWork, ILogger<EventService> logger, ICurrentUser currentUser)
     {
         _mapper = mapper;
         _eventValidator = eventValidator;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _currentUser = currentUser;
     }
 
     public async Task<ErrorOr<EventResponse>> CreateEvent(CreateEventRequest request)
     {
         var newEvent = _mapper.Map<Event>(request);
-
+        newEvent.OrganiserId = _currentUser.UserId ??
+                               throw new InvalidOperationException(Errors.Event.NoOrganiser.Description);
+        
         var validateEventResult = await _eventValidator.ValidateAsync(newEvent);
         if (!validateEventResult.IsValid)
         {
