@@ -58,5 +58,10 @@ public class EventValidator : AbstractValidator<Event>
             .LessThanOrEqualTo(Event.MaxEventAttendance)
             .WithErrorCode(Errors.Event.ExceedsMaximumCapacity.Code)
             .WithMessage(Errors.Event.ExceedsMaximumCapacity.Description);
+
+        RuleFor(request => request.OrganiserId)
+            .NotEmpty()
+            .WithErrorCode(Errors.Event.NoOrganiser.Code)
+            .WithMessage(Errors.Event.NoOrganiser.Description);
     }
 }

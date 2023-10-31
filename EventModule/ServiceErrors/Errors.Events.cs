@@ -54,10 +54,14 @@ public static class Errors
 
         public static Error NoTicketsAvailable => Error.Failure(
             code: "Event.NoTicketsAvailable",
-            description: $"Sorry, there aren't any tickets available!");
+            description: "Sorry, there aren't any tickets available!");
 
         public static Error ConcurrencyConflict => Error.Failure(
             code: "Event.ConcurrencyConflict",
-            description: $"Sorry, this ticket has been purchased already!");
+            description: "Sorry, this ticket has been purchased already!");
+        
+        public static Error NoOrganiser => Error.Unexpected(
+            code: "Event.NoOrganiser",
+            description: "This event is missing an organiser!");
     }
 }
