@@ -30,6 +30,7 @@ public static class EventServiceExtensions
     private static void RegisterCustomDependencies(IServiceCollection services)
     {
         services.AddScoped<IEventService, EventService>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
     }
 
     /// <summary>
