@@ -67,8 +67,8 @@ public static class UserAppExtensions
 
     private static async Task SeedUsers(UserManager<ApplicationUser> userManager)
     {
-        var adminUser = CreateUser("Owner", "xxxx@example.com", UserRoles.Admin.ToString());
-        var normalUser = CreateUser("User", "user@example.com", UserRoles.User.ToString());
+        var adminUser = CreateUser("Owner", "xxxx@example.com", UserRoles.Admin.ToString(), "c0bdebd1-f275-4722-aa54-ca4524e4b998");
+        var normalUser = CreateUser("User", "user@example.com", UserRoles.User.ToString(), "337fa2c2-09bc-44e4-ac44-3d5641619829");
 
         await AddUser(userManager, adminUser, "secretPassword12@");
         await AddUser(userManager, normalUser, "secretPassword12@");
@@ -76,10 +76,11 @@ public static class UserAppExtensions
         Console.WriteLine("UserModule: User seeding complete.");
     }
 
-    private static ApplicationUser CreateUser(string userName, string email, string role)
+    private static ApplicationUser CreateUser(string userName, string email, string role, string userId)
     {
         return new ApplicationUser
         {
+            Id = userId,
             FirstName = userName,
             LastName = "Ihenacho",
             Email = email,
