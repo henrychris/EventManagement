@@ -66,7 +66,8 @@ public static class EventAppExtensions
             EventStatus = EventStatus.Upcoming,
             Date = DateTime.Now.AddDays(1).Date,
             StartTime = DateTime.Now.AddDays(1).AddHours(1).Date,
-            EndTime = DateTime.Now.AddDays(1).AddHours(6).Date
+            EndTime = DateTime.Now.AddDays(1).AddHours(6).Date,
+            OrganiserId = "c0bdebd1-f275-4722-aa54-ca4524e4b998"
         });
         Console.WriteLine($"EventModule: Added default event: {DefaultEventName}");
 
@@ -80,7 +81,7 @@ public static class EventAppExtensions
             EventStatus = EventStatus.Canceled,
             Date = date,
             StartTime = date.AddHours(1).Date,
-            EndTime = date.AddHours(6).Date
+            EndTime = date.AddHours(6).Date, OrganiserId = "c0bdebd1-f275-4722-aa54-ca4524e4b998"
         });
         Console.WriteLine($"EventModule: Added default event: Summer Music Concert.");
     }
