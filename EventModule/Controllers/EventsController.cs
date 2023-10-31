@@ -114,13 +114,14 @@ public class EventsController : BaseController
     /// </summary>
     /// <param name="pageNumber">The page number.</param>
     /// <param name="pageSize">The page size.</param>
+    /// <param name="sort"></param>
     /// <returns>A list of events that match the criteria.</returns>
     /// <remarks>Returns an empty list if no events match the criteria</remarks>
     [HttpGet("available-tickets")]
     public async Task<IActionResult> GetEventsWithAvailableTickets(int pageNumber = SearchConstants.PageNumber,
-        int pageSize = SearchConstants.PageSize)
+        int pageSize = SearchConstants.PageSize, string sort = EventSortStrings.DateAsc)
     {
-        var searchEventResult = await _eventService.GetEventsWithAvailableTickets(pageNumber, pageSize);
+        var searchEventResult = await _eventService.GetEventsWithAvailableTickets(pageNumber, pageSize, sort);
         return searchEventResult.Match(
             _ => Ok(searchEventResult.ToSuccessfulApiResponse()),
             ReturnErrorResponse);

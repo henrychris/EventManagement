@@ -7,6 +7,6 @@ namespace EventModule.Repositories;
 
 public interface IEventRepository : IBaseRepository<Event>
 {
-    Task<IEnumerable<Event>> GetEventsWithAvailableTickets(int pageNumber, int pageSize);
+    Task<IEnumerable<Event>> GetEventsWithAvailableTickets(int pageNumber, int pageSize, EventSortOption sortOption);
     Task<IEnumerable<Event>> SearchEvents(SearchEventRequest request, EventSortOption sort);
 }

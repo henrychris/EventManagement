@@ -11,7 +11,7 @@ public interface IEventService
     Task<ErrorOr<EventResponse>> UpdateEvent(string id, UpdateEventRequest request);
     Task<ErrorOr<Deleted>> DeleteEvent(string id);
     Task<ErrorOr<SearchEventResponse>> SearchEvents(SearchEventRequest request);
-    Task<ErrorOr<SearchEventResponse>> GetEventsWithAvailableTickets(int pageNumber, int pageSize);
+    Task<ErrorOr<SearchEventResponse>> GetEventsWithAvailableTickets(int pageNumber, int pageSize, string sort);
 
     Task<ErrorOr<TicketPurchaseResponse>> BuyTicket(string id);
 }

@@ -112,10 +112,11 @@ public class EventService : IEventService
         return new SearchEventResponse(eventData, eventData.Count);
     }
 
-    // todo: just one test. given a list of events that have tickets and don't, only get the ones with tickets.
-    public async Task<ErrorOr<SearchEventResponse>> GetEventsWithAvailableTickets(int pageNumber, int pageSize)
+    public async Task<ErrorOr<SearchEventResponse>> GetEventsWithAvailableTickets(int pageNumber, int pageSize,
+        string sort)
     {
-        var result = await _unitOfWork.Events.GetEventsWithAvailableTickets(pageNumber, pageSize);
+        Enum.TryParse<EventSortOption>(sort, true, out var sortOption);
+        var result = await _unitOfWork.Events.GetEventsWithAvailableTickets(pageNumber, pageSize, sortOption);
         var eventData = result.Select(x => _mapper.Map<EventResponse>(x)).ToList();
         return new SearchEventResponse(eventData, eventData.Count);
     }

@@ -18,16 +18,18 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
                                              throw new InvalidCastException(
                                                  "Event DB Context not passed from unit of work.");
 
-    public async Task<IEnumerable<Event>> GetEventsWithAvailableTickets(int pageNumber, int pageSize)
+    public async Task<IEnumerable<Event>> GetEventsWithAvailableTickets(int pageNumber, int pageSize,
+        EventSortOption sortOption)
     {
         pageNumber = pageNumber <= 0 ? SearchConstants.PageNumber : pageNumber;
         pageSize = pageSize < 0 ? SearchConstants.PageSize : pageSize;
 
-        return await EventDbContext.Events
+        var query = SortResults(EventDbContext.Events
             .Where(x => x.TicketsAvailable > 0)
             .Skip(pageSize * (pageNumber - 1))
-            .Take(pageSize)
-            .ToListAsync();
+            .Take(pageSize), sortOption);
+
+        return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<Event>> SearchEvents(SearchEventRequest request, EventSortOption sort)
