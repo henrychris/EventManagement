@@ -64,6 +64,7 @@ public class EventService : IEventService
         existingEvent.Date = request.Date ?? existingEvent.Date;
         existingEvent.StartTime = request.StartTime ?? existingEvent.StartTime;
         existingEvent.EndTime = request.EndTime ?? existingEvent.EndTime;
+        existingEvent.TicketsAvailable = request.TicketsAvailable ?? existingEvent.TicketsAvailable;
 
         if (!string.IsNullOrEmpty(request.EventStatus))
         {

@@ -116,7 +116,7 @@ public class EventControllerTests : IntegrationTest
                 null,
                 null,
                 null,
-                null));
+                null, null));
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -142,7 +142,7 @@ public class EventControllerTests : IntegrationTest
                 null,
                 null,
                 null,
-                EventStatus.Canceled.ToString()));
+                EventStatus.Canceled.ToString(), null));
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);

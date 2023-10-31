@@ -124,7 +124,7 @@ public class EventServiceTests
         // Arrange
         const string eventId = "1";
         var existingEvent = new Event { Id = eventId, Name = "Test Event" };
-        var request = new UpdateEventRequest("Updated Test Event", null, null, null, null, null, null);
+        var request = new UpdateEventRequest("Updated Test Event", null, null, null, null, null, null, null);
 
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(existingEvent);
         // Act
@@ -140,7 +140,7 @@ public class EventServiceTests
     {
         // Arrange
         const string eventId = "1";
-        var request = new UpdateEventRequest("Updated Test Event", null, null, null, null, null, null);
+        var request = new UpdateEventRequest("Updated Test Event", null, null, null, null, null, null, null);
 
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync((Event)null);
 
@@ -158,7 +158,7 @@ public class EventServiceTests
         // Arrange
         var eventId = "1";
         var existingEvent = new Event { Id = eventId, Name = "Test Event" };
-        var request = new UpdateEventRequest(null, null, -1m, null, null, null, null);
+        var request = new UpdateEventRequest(null, null, -1m, null, null, null, null, null);
 
         _unitOfWorkMock.Setup(uow => uow.Events.GetByIdAsync(eventId)).ReturnsAsync(existingEvent);
 

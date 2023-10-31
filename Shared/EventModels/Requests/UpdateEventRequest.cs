@@ -8,4 +8,6 @@ public record UpdateEventRequest(
     DateTime? Date,
     DateTime? StartTime,
     DateTime? EndTime,
-    string? EventStatus);
+    string? EventStatus, int? TicketsAvailable);
+
+// todo: update event capacity for admin. they can adjust the number of tickets sold.
