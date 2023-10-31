@@ -1,4 +1,7 @@
-﻿namespace Shared.EventModels.Requests;
+﻿using Shared.Enums;
 
-public record SearchEventRequest(string? EventName, DateTime? StartDate, DateTime? EndDate, decimal? MaxPrice, decimal MinPrice = 0.00m,
-    int PageSize = SearchConstants.PageSize, int PageNumber = SearchConstants.PageNumber);
+namespace Shared.EventModels.Requests;
+
+public record SearchEventRequest(string? EventName, DateTime? StartDate, DateTime? EndDate, decimal? MaxPrice,
+    decimal MinPrice = 0.00m) : SearchRequestBase(SearchConstants.PageSize, SearchConstants.PageNumber,
+    EventSortStrings.DateAsc);

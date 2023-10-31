@@ -100,9 +100,9 @@ public class EventsController : BaseController
     /// <returns>A list of events that match the search criteria.</returns>
     /// <remarks>Returns an empty list if no events match the criteria</remarks>
     [HttpGet("search")]
-    public async Task<IActionResult> SearchEvents([FromQuery] SearchEventRequest request, string sort = EventSortStrings.DateAsc)
+    public async Task<IActionResult> SearchEvents([FromQuery] SearchEventRequest request)
     {
-        var searchEventResult = await _eventService.SearchEvents(request, sort);
+        var searchEventResult = await _eventService.SearchEvents(request);
         return searchEventResult.Match(
             _ => Ok(searchEventResult.ToSuccessfulApiResponse()),
             ReturnErrorResponse);

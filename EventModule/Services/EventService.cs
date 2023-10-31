@@ -104,9 +104,9 @@ public class EventService : IEventService
 
     // todo: add integration tests
     // test all possible situations
-    public async Task<ErrorOr<SearchEventResponse>> SearchEvents(SearchEventRequest request, string sort)
+    public async Task<ErrorOr<SearchEventResponse>> SearchEvents(SearchEventRequest request)
     {
-        Enum.TryParse<EventSortOption>(sort, true, out var sortOption);
+        Enum.TryParse<EventSortOption>(request.Sort, true, out var sortOption);
         var result = await _unitOfWork.Events.SearchEvents(request, sortOption);
         var eventData = result.Select(x => _mapper.Map<EventResponse>(x)).ToList();
         return new SearchEventResponse(eventData, eventData.Count);
