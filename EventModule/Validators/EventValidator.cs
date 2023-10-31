@@ -50,7 +50,7 @@ public class EventValidator : AbstractValidator<Event>
             .WithMessage(Errors.Event.InvalidTicketPrice.Description);
 
         RuleFor(request => request.TicketsAvailable)
-            .GreaterThanOrEqualTo(1)
+            .GreaterThanOrEqualTo(Event.MinEventAttendance)
             .WithErrorCode(Errors.Event.InvalidCapacity.Code)
             .WithMessage(Errors.Event.InvalidCapacity.Description);
 

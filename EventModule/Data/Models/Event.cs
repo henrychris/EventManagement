@@ -10,6 +10,7 @@ public class Event
     public const int MinDescriptionLength = 3;
     public const int MaxDescriptionLength = 100;
 
+    public const int MinEventAttendance = 1;
     public const int MaxEventAttendance = 100000;
     
     // Properties
