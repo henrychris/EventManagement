@@ -1,0 +1,23 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.8"
+services:
+  api:
+    build:
+      context: "C:\\Users\\user\\Documents\\GitHub\\EventManagement"
+      dockerfile: "API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/API.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      NUGET_PACKAGES: "C:\\Users\\user\\.nuget\\packages"
+      NUGET_FALLBACK_PACKAGES: "C:\\Users\\user\\.nuget\\packages"
+    image: "api:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\user\\.nuget\\packages:/root/.nuget/fallbackpackages"
+    - "C:\\Users\\user\\Documents\\GitHub\\EventManagement\\API:/app:rw"
+    - "C:\\Users\\user\\Documents\\GitHub\\EventManagement:/src:rw"
+    working_dir: "/app"
