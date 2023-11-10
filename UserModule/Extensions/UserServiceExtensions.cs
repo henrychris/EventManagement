@@ -32,6 +32,7 @@ public static class UserServiceExtensions
     {
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IUserService, UserService>();
     }
 
     /// <summary>
