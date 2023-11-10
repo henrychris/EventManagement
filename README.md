@@ -26,12 +26,14 @@ The Shared project is a class library that contains packages, entities, and code
 - Constants: Holds shared constants, configurations, and settings.
 
 ## Getting Started
-To get started with the modular monolith application, follow these steps:
+To get started follow these steps:
 
 1. Clone the repository or obtain the application source code.
+2. Ensure Docker is installed on your system.
+3. Navigate to the API directory, and run `docker compose up`. This will pull required images, build the project image and run the containers.
+4. The API container tends to run ahead of the database, so restart it so it seeds properly.
+5. Use the postman collection [here](https://documenter.getpostman.com/view/22039666/2s9YXk2LAj) to test the API.
 
-2. Set up your development environment, including required dependencies, databases, and .NET tools.
-
-3. Build and run the application using the API project as the entry point.
-
-4. Explore the different modules and their functionalities based on your requirements.
+## Notes
+1. To debug, change the server name in the database connection string to `localhost`. Ensure this container, `mcr.microsoft.com/mssql/server:2022-latest` is running.
+2. The project uses dotnet secrets for ease of development. Of course, a production app would use a key vault.
