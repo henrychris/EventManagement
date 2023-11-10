@@ -1,11 +1,9 @@
 ﻿# EventModule
-The EventModule is a C# library that provides functionality for handling events in a modular way.
-
-## Installation
-To use the EventModule in your project, you can install it via NuGet:
+The EventModule is a class library that provides functionality for handling events in a modular way.
 
 ## Usage
-To use the EventModule, you can add it to your IServiceCollection and IApplicationBuilder in your Startup.cs file:
+To use the EventModule, first add a reference to it from the API project.  
+Next, you can add it to your IServiceCollection and IApplicationBuilder in your Startup.cs file:
 
 ```
 using EventModule.Extensions;
@@ -23,4 +21,5 @@ public class Startup
     }
 }
 ```
-Once the EventModule is added to your project, you can use it to handle events in a modular way.
+
+Once added, all services will be registered and controllers will be automatically detected by the framework. 
