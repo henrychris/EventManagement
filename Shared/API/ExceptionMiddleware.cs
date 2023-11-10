@@ -24,7 +24,7 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             LogException(httpContext, ex);
-            await HandleExceptionAsync(httpContext, ex.Message);
+            await HandleExceptionAsync(httpContext);
         }
     }
 
@@ -48,15 +48,17 @@ public class ExceptionMiddleware
         _logger.LogError("{@msg}", msg);
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, string errorMessage)
+    private static async Task HandleExceptionAsync(HttpContext context)
     {
         context.Response.ContentType = "application/problem+json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-        var response = new ApiResponse<object>(null, "Sorry, something went wrong!", false)
+        var errors = new List<object>
         {
-            Note = string.Concat(errorMessage, " ", "Check the application logs for more info.")
+            new { SharedErrors.GenericError.Code, SharedErrors.GenericError.Description }
         };
+        
+        var response = new ApiErrorResponse<object>(errors, SharedErrors.GenericError.Description);
         await context.Response.WriteAsync(response.ToJsonString());
     }
 }
