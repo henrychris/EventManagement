@@ -41,6 +41,8 @@ public static class ServiceInitializer
     /// <param name="services">The service collection.</param>
     private static void SetupAuth(IServiceCollection services)
     {
+        // todo: this should be for dev environment only sha.
+        // check how to bind the secrets to a class.
         var secrets = new ConfigurationBuilder()
             .AddUserSecrets<Program>()
             .Build();

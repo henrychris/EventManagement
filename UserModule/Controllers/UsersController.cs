@@ -23,4 +23,7 @@ public class UsersController : BaseController
             _ => Ok(getUserResult.ToSuccessfulApiResponse()),
             ReturnErrorResponse);
     }
+    
+    // todo: get user events with message broker
+    // /users/{userid}/events
 }
